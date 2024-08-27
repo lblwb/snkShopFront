@@ -3,7 +3,7 @@
     <div class="navbarBlbAppWrapper">
       <div class="navbarBlbAppList" style="">
         <div class="navbarBlbAppListItem __Active" :class="{__Active: $route && $route.name === 'index'}"
-             @click="$router.push({name: 'index'})" style="position: sticky; top: 0; bottom: 0; left: 0; z-index: 4">
+             @click="$router.push({name: 'index'})" style="position: sticky; top: 0; bottom: 0; left: 0; z-index: 4" v-haptic-engine>
           <div class="navbarBlbAppListItemWrapper">
             <div class="navbarBlbAppListItemIcon">
               <svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -20,7 +20,7 @@
         <div class="navbarBlbAppListItem" v-for="catItem in catg.all.data" v-if="catg.all.data"
              @click="$router.push({name:'catalog-cat-slug', params: {
                slug: catItem.slug
-             }})" :class="{__Active: $route && $route.name.includes('catalog-cat')}">
+             }})" :class="{__Active: $route && $route.name.includes('catalog-cat')}" v-haptic-engine>
           <div class="navbarBlbAppListItemWrapper">
             <div class="navbarBlbAppListItemIcon">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

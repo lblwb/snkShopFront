@@ -16,7 +16,7 @@
 ">
             <div class="searchProductBlockInputBox" style="width: 100%; height: 100%;">
               <input type="text" placeholder="Finding Snickers sneakers"
-                     style="">
+                     style="" v-haptic-engine>
             </div>
           </div>
         </div>

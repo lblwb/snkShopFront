@@ -1,6 +1,6 @@
 <template>
   <div class="rewardPoints">
-    <button class="rewardPointsButton" @click="$router.push({name: 'user-reward'})">
+    <button class="rewardPointsButton" @click="$router.push({name: 'user-reward'})" v-haptic-engine>
       <div class="rewardPointsButtonWrapper"
            style="display: flex;flex-flow: row wrap;align-items: flex-start;  justify-content: space-between; width: 100%;">
 

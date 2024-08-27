@@ -4,7 +4,8 @@
       <div class="AppHeader"
            style="padding-bottom:6px; margin-bottom: 8px; border-bottom: 1px solid #F4F4F4; min-height: 36px;">
         <div class="AppHeaderWrapper" style="display: flex; align-items: center; justify-content: space-between;">
-          <div class="AppHeaderUserBar" @click="$router.push({ name: 'user-account' })">
+          <!--          -->
+          <div class="AppHeaderUserBar" @click="$router.push({ name: 'user-account' })" v-haptic-engine>
             <div class="userBarWrapper" style="display: flex; flex-flow: row; gap: 10px; align-items: center">
               <div class="userBarAva">
                 <div class="userBarAvaBlock"
@@ -53,7 +54,8 @@
           </div>
           <div class="AppHeaderActions">
             <div class="AppHeaderActionsWrapper">
-              <div class="AppHeaderActionsBtn" style="background: #fff; padding: 6px 8px; border-radius: 32px;">
+              <div class="AppHeaderActionsBtn" style="background: #fff; padding: 6px 8px; border-radius: 32px;"
+                   @click="showGroupTelegram" v-haptic-engine>
                 <div class="actionsBtnWrapper" style="display: flex; align-items: center; gap: 8px">
                   <div class="actionsBtnBlock"
                        style="background: #357AF6; border-radius: 32px; display: flex; align-items: center;">
@@ -96,7 +98,7 @@
       <div class="AppLwBody">
         <!--        <slot name="Body">-->
         <ClientOnly>
-          <NuxtLoadingIndicator />
+          <NuxtLoadingIndicator/>
           <MiniApp/>
           <!--   -->
           <NuxtPage/>
@@ -137,6 +139,11 @@ onServerPrefetch(async () => {
 })
 
 
+const showGroupTelegram = () => {
+  console.log("showGroupTelegram");
+}
+
+
 </script>
 
 <style scoped>
@@ -167,12 +174,12 @@ onServerPrefetch(async () => {
   align-items: center;
 }
 
-.AppHeaderUserBar{
+.AppHeaderUserBar {
 
 }
 
 .AppHeaderUserBar:hover,
-.AppHeaderUserBar:focus{
+.AppHeaderUserBar:focus {
   opacity: 0.8;
 }
 

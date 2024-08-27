@@ -1,6 +1,6 @@
 <template>
   <div class="deliveryGua">
-    <button class="deliveryGuaBtn" @click="$router.push({ name: 'static-faq-delivery' })">
+    <button class="deliveryGuaBtn" @click="$router.push({ name: 'static-faq-delivery' })" v-haptic-engine>
       <div class="deliveryGuaBtnWrapper">
         <div class="deliveryGuaBtnRow">
           <div class="deliveryGuaBtnRowWrapper">

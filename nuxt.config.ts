@@ -51,6 +51,7 @@ export default defineNuxtConfig({
         "~/plugins/tma",
         "~/plugins/shop/shopPersist",
         "~/plugins/shop/cart/cartPersist",
+        "~/plugins/app/trigger/glbTapClick",
     ],
 
     compatibilityDate: '2024-08-26'

@@ -1,6 +1,6 @@
 <template>
   <div class="whereToStart">
-    <button class="whereToStartButton" @click="$router.push({name: 'catalog'})">
+    <button class="whereToStartButton" @click="$router.push({name: 'catalog'})" v-haptic-engine>
       <div class="whereToStartBtnBundles">
         <div class="whereToStartBtnBundlesWrapper"
              style="">

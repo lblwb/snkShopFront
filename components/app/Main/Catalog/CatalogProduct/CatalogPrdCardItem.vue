@@ -2,8 +2,8 @@
   <div v-if="product" class="productCardItem">
 
     <div class="productCardContainer">
-      <div class="productCardInfo">
-        <div class="productCardImg" @click="$router.push({name: 'catalog-product-slug', params: {slug: product.id}})">
+      <div class="productCardInfo" @click="$router.push({name: 'catalog-product-slug', params: {slug: product.id}})" v-haptic-engine>
+        <div class="productCardImg">
           <img :src="product.image_src" :alt="product.name" class="productCardImage"/>
         </div>
         <div class="productCardPrice">{{ product.price }}$</div>
@@ -17,8 +17,8 @@
               <button @click="decreaseQuantity(product.id)"
                       class="productCardButton"
                       :class="{'__Disabled': getProductQty(product.id) < 1}"
-                      :disabled="getProductQty(product.id) === 0">
-                <span class="qtyAddPlusBtnIcon">
+                      :disabled="getProductQty(product.id) === 0" v-haptic-engine>
+                <span class="qtyAddMinusBtnIcon">
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M3.33331 8H12.6666" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                           stroke-linejoin="round"/>
@@ -38,7 +38,7 @@
 
           <div class="productCardActionsQtyAdd">
             <div class="qtyAddPlusBtn">
-              <button @click="handleIncrease(product)" class="productCardButton">
+              <button @click="handleIncrease(product)" class="productCardButton" v-haptic-engine>
                 <span class="qtyAddPlusBtnIcon">
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M7.99998 3.33333V12.6667M3.33331 8H12.6666" stroke="currentColor" stroke-width="2"
@@ -79,14 +79,20 @@ const props = defineProps<{
 
 const getProductQty = (productId: string) => cartStore.getProductQty(productId);
 const handleIncrease = (product: any) => {
-  const existingQty = getProductQty(product.id);
-  if (existingQty === 0) {
-    cartStore.addItem(product);
-  } else {
-    cartStore.increaseQty(product.id)
-  }
+  setTimeout(() => {
+    const existingQty = getProductQty(product.id);
+    if (existingQty === 0) {
+      cartStore.addItem(product);
+    } else {
+      cartStore.increaseQty(product.id)
+    }
+  }, 500);
 };
-const decreaseQuantity = (productId: string) => cartStore.decreaseQty(productId);
+const decreaseQuantity = (productId: string) => {
+  setTimeout(() => {
+    cartStore.decreaseQty(productId)
+  }, 500);
+};
 </script>
 
 <style scoped>
@@ -157,6 +163,7 @@ const decreaseQuantity = (productId: string) => cartStore.decreaseQty(productId)
   flex-flow: row nowrap;
   justify-content: space-between;
 }
+
 
 .productCardButton {
   border: none;

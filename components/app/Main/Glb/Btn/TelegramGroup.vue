@@ -1,6 +1,6 @@
 <template>
   <div class="telegramGroup">
-    <button class="telegramGroupBtn">
+    <button class="telegramGroupBtn" v-haptic-engine>
       <div class="telegramGroupBtnWrapper">
         <div class="textContainer">
           <span class="mainText">Telegram Group</span>

@@ -1,5 +1,5 @@
 <template>
-  <div class="BannerRecom">
+  <div class="BannerRecom" v-haptic-engine>
     <div class="BannerRecomWrapper">
       <div class="BannerRecomImage" style="">
         <img src="~/assets/images/home/banner_home.png"

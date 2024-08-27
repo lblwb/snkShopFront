@@ -1,5 +1,5 @@
 <template>
-  <div class="cartFixedBar" v-if="cartStore.getTotalItems > 0" @click="$router.push({name: 'cart-checkout'})">
+  <div class="cartFixedBar" v-if="cartStore.getTotalItems > 0" @click="$router.push({name: 'cart-checkout'})" v-haptic-engine>
     <button class="cartFixedBarBtn" style="">
       <div class="cartFixedBarBtnWrapper" style="display: flex; align-items: center; gap: 10px">
         <div class="cartFixedBarBtnTitle">
