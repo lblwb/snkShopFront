@@ -20,7 +20,7 @@
         <div class="navbarBlbAppListItem" v-for="catItem in catg.all.data" v-if="catg.all.data"
              @click="$router.push({name:'catalog-cat-slug', params: {
                slug: catItem.slug
-             }})" :class="{__Active: $route && $route.name.includes('catalog-cat')}" v-haptic-engine>
+             }})" :class="{__Active: $route && $route.name.includes('catalog-cat') && $router.params.slug === catItem.slug}" v-haptic-engine>
           <div class="navbarBlbAppListItemWrapper">
             <div class="navbarBlbAppListItemIcon">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
