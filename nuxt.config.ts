@@ -3,7 +3,6 @@
 // @ts-ignore
 export default defineNuxtConfig({
     devtools: {enabled: true},
-    ssr: false,
     devServer: {},
 
     app: {
@@ -31,13 +30,18 @@ export default defineNuxtConfig({
         appType: "spa"
     },
 
-    // Static page config & build dist folder
+    mode: 'universal',
+    target: 'static',
+    ssr: false,
+    spaLoadingTemplate: true,
+
     nitro: {
         ssr: false,
         preset: "static",
         static: true,
         distDir: 'dist',
     },
+
 
     //
     modules: ["@pinia/nuxt", '@nuxt/image', '@nuxtjs/device'],
