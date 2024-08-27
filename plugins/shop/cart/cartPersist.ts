@@ -1,13 +1,16 @@
 // plugins/cartPersist.ts
 // @ts-ignore
 import {useCartStore} from '~/stores/shop/cart/index';
+// @ts-ignore
+import {useWebAppCloudStorage} from "vue-tg";
 
 export default defineNuxtPlugin(() => {
     const cartStore = useCartStore();
+    const {setStorageItem, getStorageItem} = useWebAppCloudStorage();
 
-    // Функция для загрузки данных из localStorage
+     // Load to cloudStorage
     const loadCartFromLocalStorage = () => {
-        const cartData = localStorage.getItem('cart');
+        const cartData = getStorageItem('cart');
         if (cartData) {
             const parsedData = JSON.parse(cartData);
             cartStore.items = parsedData.items;
@@ -15,20 +18,19 @@ export default defineNuxtPlugin(() => {
         }
     };
 
-    // Функция для сохранения данных в localStorage
-    const saveCartToLocalStorage = () => {
+    // Save to cloudStorage
+    const saveCartToLocalStorage = async () => {
         const cartData = {
             items: cartStore.items,
             comboId: cartStore.comboId
         };
-        localStorage.setItem('cart', JSON.stringify(cartData));
+        await setStorageItem('cart', JSON.stringify(cartData));
     };
 
-    // Загрузка данных при инициализации
+    //load from cloud
     loadCartFromLocalStorage();
-
-    // Сохранение данных при изменении состояния корзины
-    cartStore.$subscribe(() => {
-        saveCartToLocalStorage();
+    // save to cloud
+    cartStore.$subscribe(async () => {
+        await saveCartToLocalStorage();
     });
 });
