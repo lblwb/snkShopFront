@@ -2,8 +2,8 @@
   <div class="navbarBlbApp">
     <div class="navbarBlbAppWrapper">
       <div class="navbarBlbAppList" style="">
-        <div class="navbarBlbAppListItem __Active" :class="{__Active: $route && $route.name === 'index'}"
-             @click="$router.push({name: 'index'})" style="position: sticky; top: 0; bottom: 0; left: 0; z-index: 4" v-haptic-engine>
+        <div class="navbarBlbAppListItem __Main" :class="{__Active: $route && $route.name === 'index'}"
+             @click="$router.push({name: 'index'})" style="" v-haptic-engine>
           <div class="navbarBlbAppListItemWrapper">
             <div class="navbarBlbAppListItemIcon">
               <svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -20,7 +20,9 @@
         <div class="navbarBlbAppListItem" v-for="catItem in catg.all.data" v-if="catg.all.data"
              @click="$router.push({name:'catalog-cat-slug', params: {
                slug: catItem.slug
-             }})" :class="{__Active: $route && $route.name.includes('catalog-cat') && $router.params.slug === catItem.slug}" v-haptic-engine>
+             }})"
+             :class="{__Active: $route && ($route.name.includes('catalog-cat') && $route.params.slug === catItem.slug)}"
+             v-haptic-engine>
           <div class="navbarBlbAppListItemWrapper">
             <div class="navbarBlbAppListItemIcon">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -96,6 +98,16 @@ onMounted(() => {
   display: flex;
 }
 
+.navbarBlbAppListItem.__Main {
+  /*position: sticky;*/
+  /*top: 0;*/
+  /*bottom: 0;*/
+  /*left: 0;*/
+  z-index: 4;
+  color: #000;
+  background: #fff;
+}
+
 .navbarBlbAppListItem.__Active {
   border: solid 2px transparent;
   background: #fff;
@@ -112,8 +124,7 @@ onMounted(() => {
   border-radius: 19px;
   background: radial-gradient(circle at center, #4867F5, #4659F0 14.29%, #7255CA 28.57%, #8852B8 42.86%, #B35496 57.14%, #C85486 71.43%, #D87B87 85.71%, #E19038 100%);
   border: 1px solid transparent;
-  -webkit-mask: linear-gradient(#fff 0 0) padding-box,
-  linear-gradient(#fff 0 0);
+  -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: destination-out;
   mask-composite: exclude;
 }

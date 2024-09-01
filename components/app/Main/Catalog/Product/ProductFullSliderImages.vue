@@ -10,22 +10,23 @@
                style="position: relative; padding-bottom: 64%;     width: calc(100vw - 20px);     display: block;"><img
               alt="images" sizes="100vw" :srcset="image.original" :src="image.original" decoding="async"
               data-nimg="fill"
-              style="position: absolute; height: 100%; width: 100%; inset: 0px; color: transparent; object-position: top; object-fit: contain;">
+              style="position: absolute; height: 100%; width: 100%; inset: 0px; color: transparent; object-position: top; object-fit: contain;     border-radius: 20px;">
           </div>
         </div>
       </div>       <!-- no_image  -->
       <div class="ProductFullBodyImagesItem">
         <div class="fullBodyImagesItemImage"
              style="position: relative; padding-bottom: 64%;     width: calc(100vw - 20px);     display: block;"><img
-            alt="images" sizes="100vw" :srcset="'/no_image.jpg'" src="~/assets/images/products/test.png"
+            alt="images" sizes="100vw" :srcset="'/no_image.jpg'" :src="getImageUrl('products/test.png')"
             decoding="async" data-nimg="fill"
-            style="position: absolute; height: 100%; width: 100%; inset: 0px; color: transparent; object-position: top; object-fit: contain;">
+            style="position: absolute; height: 100%; width: 100%; inset: 0px; color: transparent; object-position: top; object-fit: contain; border-radius: 20px;">
         </div>
       </div>
     </div>
   </div>
 </template>
 <script setup>
+import {getImageUrl} from "~/utils/assets/img";
 defineComponent({
   name: "ProductFullSliderImages",
 })

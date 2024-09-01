@@ -4,62 +4,26 @@
     <!-- <img src="~/assets/images/roulete-loading.gif" alt="" style="max-width: 420px; max-height: 420px;"> -->
     <div class="loading_wrapper">
       <div class="loading_logo">
-        <!--        <img src="~/assets/images/logoapp.png">-->
-
-        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.0" width="64px"
-             height="64px" viewBox="0 0 128 128" xml:space="preserve"><script xmlns=""/>
-          <script type="text/ecmascript" xlink:href="//faviconer.net/jscripts/smil.user.js"/>
-          <g><path d="M75.4 126.63a11.43 11.43 0 0 1-2.1-22.65 40.9 40.9 0 0 0 30.5-30.6 11.4 11.4 0 1 1 22.27 4.87h.02a63.77 63.77 0 0 1-47.8 48.05v-.02a11.38 11.38 0 0 1-2.93.37z" fill="currentColor"/>
-            <animateTransform attributeName="transform" type="rotate" from="0 64 64" to="360 64 64" dur="1600ms"
-                              repeatCount="indefinite"/></g>
-          <script xmlns=""/></svg>
+        <img :src="getImageUrl('home/banner_home.png')" style="height: 14vh; max-height: 14vh">
       </div>
     </div>
-
-
   </div>
 </template>
 
-<script>
-export default {
-  data: () => ({
-    loading: false,
-  }),
-  methods: {
-    // getProjectName() {
-    //
-    // },
-    disableScrolling() {
-      var x = window.scrollX;
-      var y = window.scrollY;
-      window.onscroll = function () {
-        window.scrollTo(x, y);
-      };
-    },
-    enableScrolling() {
-      window.onscroll = function () {
-      };
-    },
-    start() {
-      this.loading = true;
-      this.disableScrolling();
-    },
-    finish() {
-      this.loading = false;
-      this.enableScrolling();
-    },
-  },
-  computed: {
-    // getProjectName() {
-    //   setInterval(function () {
-    //     setTimeout(function () {
-    //       return this.$nuxt.context.app.head.description;
-    //     }, 500);
-    //     return "";
-    //   }, 1000);
-    // }
-  }
-};
+<script setup lang="ts">
+import {getImageUrl} from "~/utils/assets/img";
+
+const nuxtApp = useNuxtApp();
+const loading = ref(false);
+nuxtApp.hook("page:start", () => {
+  loading.value = true;
+});
+nuxtApp.hook("page:finish", () => {
+  setTimeout(() => {
+    loading.value = false;
+  }, 500)
+
+});
 </script>
 
 <style scoped>
@@ -114,7 +78,6 @@ export default {
   font-size: 16px;
   line-height: 33px;
   color: var(--text-accent-color);
-//opacity: 0.2;
 }
 
 </style>

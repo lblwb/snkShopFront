@@ -27,7 +27,7 @@
                   <div class="userBarInfoName" style="margin-bottom: 3px;">
                     <div class="userBarInfoNameWrapper" style="display: flex; align-items: center; gap: 4px;">
                       <div class="userBarInfoNameTitle" style="">
-                        {{ userData.username }}
+                        {{ userData ? userData.username : "Anon" }}
                       </div>
                       <div class="userBarInfoNameIcon" style="display: flex; align-items: center;">
                         <svg width="14" height="15" viewBox="0 0 14 15" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -96,12 +96,17 @@
       <NavbarBlbApp/>
 
       <div class="AppLwBody">
+
         <!--        <slot name="Body">-->
         <ClientOnly>
-          <NuxtLoadingIndicator/>
+<!--          <NuxtLoadingIndicator/>-->
+          <LoadingBar/>
+
           <MiniApp/>
           <!--   -->
-          <NuxtPage/>
+          <Transition name="fade">
+            <NuxtPage/>
+          </Transition>
         </ClientOnly>
         <!--        </slot>-->
       </div>
@@ -145,6 +150,10 @@ const showGroupTelegram = () => {
 
 
 </script>
+
+<style>
+@import 'animate.css';
+</style>
 
 <style scoped>
 .AppLw {

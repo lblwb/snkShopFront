@@ -23,18 +23,19 @@ export const useCartStore = defineStore('cartStore', {
     actions: {
         addItem(product: Product) {
             if (product.combo_id) {
-                // Если добавляется комбо-набор
+                // if combo-kit
                 if (this.comboId && this.comboId !== product.combo_id) {
                     // Показываем pop-up и очищаем корзину перед добавлением нового комбо-набора
                     this.showReplaceComboPopup(product);
                 } else {
+                    // if exist combo-kit
                     // Добавляем комбо-набор, если в корзине его еще нет
                     this.clearCart();
                     this.comboId = product.combo_id;
                     this.items.push({...product, qty: 1});
                 }
             } else {
-                // Если добавляется обычный товар
+                // if add default product
                 const existingItem = this.items.find((item: { id: any; }) => item.id === product.id);
                 if (existingItem) {
                     existingItem.qty = (existingItem.qty || 0) + 1;

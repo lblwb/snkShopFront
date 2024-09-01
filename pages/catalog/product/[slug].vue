@@ -3,7 +3,7 @@
     <!--        {{ currentProduct }}-->
     <div class="ProductFullBodyWrapper" style="">
       <div class="ProductFullBodyHeadingActions"
-           style="position: fixed; top: 0; right: 0; left: 0; z-index: 40; padding: 10px; background: #fff;">
+           style="position: fixed;right: 0px;left: 0px;bottom: 56px;z-index: 40;padding: 10px;background: rgb(255, 255, 255);">
         <div class="ProductFullBodyHeadingActionsWrapper"
              style="display: flex; align-items: center; justify-content: space-between;">
           <div class="ProductFullBodyHeadingActionsLastBtn" @click="$router.back()">
@@ -12,8 +12,10 @@
                     stroke-linejoin="round"/>
             </svg>
           </div>
-          <div class="ProductFullBodyHeadingActionsLastTitle">
-            {{ "" }}
+          <div class="ProductFullBodyHeadingActionsLastBtn" @click="$router.push({
+          name: 'cart-checkout'
+          })" style="padding: 10px; background: var(--accent-block-color); border-radius: 16px;">
+            Cart
           </div>
           <!--          <div class="ProductFullBodyHeadingActionsLastFav" @click="addFavorite(currentProduct)">-->
           <!--            <svg width="21" height="19" viewBox="0 0 21 19" fill="none" xmlns="http://www.w3.org/2000/svg">-->
@@ -70,7 +72,7 @@
                     {{
                       currentProduct && currentProduct.price && currentProduct.price !== undefined ? currentProduct.price : 0
                     }}
-                    <span style="font-family: 'Roboto',sans-serif">₽</span>
+                    <span style="font-family: 'Roboto',sans-serif">$</span>
                   </div>
                 </div>
               </div>
@@ -128,58 +130,61 @@
     </div>
 
     <div class="ProductFullFixedOrderBtn" style="align-items: center">
-      <div class="ProductFullFixedOrderBtnWrapper"
-           style="display: flex; align-items: center; justify-content: space-between">
-        <div class="ProductFullFixedOrderBtnPrice"
-             style="font-size: 20px; font-weight: 800; display: flex; align-items: center">
-          {{
-            currentProduct && currentProduct.price && currentProduct.price.excl_tax !== undefined ? currentProduct.price.excl_tax : 0
-          }}
-          <span style="font-family: 'Roboto',sans-serif">₽</span>
-        </div>
-        <div class="ProductFullFixedOrderBtnQty"
-             style="display: flex; align-items: center; flex: 1; max-width: 18vh">
-          <button @click="handleIncrease(currentProduct)" v-if="getProductQty(currentProduct.id) < 1"
-                  style="padding: 4px 12px">
-                <span class="ActionInfoBtnMoreWrapper">
-                  <span class="ActionInfoBtnMorePrice">
-                    Купить
-                  </span>
-                </span>
-          </button>
-          <div class="ProductCardActions" v-if="getQuantityToAdd > 0" style="width: 100%;">
-            <div class="ProductCardActionsWrapper" style="display: flex; gap: 3px">
-              <div class="ProductCardActionsDecQty" style="flex: 1">
-                <button @click="decreaseQuantity(currentProduct.id)"
-                        style="padding: 8px 4px; flex: 1; align-items: center">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                        d="M6 17C6.53043 17 7.03914 17.2107 7.41421 17.5858C7.78929 17.9609 8 18.4696 8 19C8 19.5304 7.78929 20.0391 7.41421 20.4142C7.03914 20.7893 6.53043 21 6 21C5.46957 21 4.96086 20.7893 4.58579 20.4142C4.21071 20.0391 4 19.5304 4 19C4 18.4696 4.21071 17.9609 4.58579 17.5858C4.96086 17.2107 5.46957 17 6 17ZM6 17H12.5M6 17V3H4M6 5L20 6L19 13H6M16 19H22"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
+      <div class="productCardAdd" v-if="getProductQty(currentProduct.id) < 1">
+        <button class="productCardAddBtn"
+                style="background: var(--accent-second-btn); border: none; width: 100%; padding: 14px 16px; border-radius: 20px"
+                @click="handleIncrease(currentProduct)"
+                v-haptic-engine>
+          <div class="productCardAddBtnWrapper">
+            <div class="productCardAddBtnTitle" style="font-weight: 600; font-size: 14px; color: #fff;">
+              Add to cart
+            </div>
+          </div>
+        </button>
+      </div>
 
-                </button>
-              </div>
-              <div class="ProductCardActionsCount"
-                   style="flex:1; display: flex; align-items: center; justify-content: center; text-align: center">
-                {{ getProductQty(currentProduct.id) }} шт.
-              </div>
-              <div class="ProductCardActionsIncQty" style="flex: 1; display: flex; align-items: center;">
-                <button @click="handleIncrease(currentProduct)"
-                        style="padding: 8px 4px; flex: 1; align-items: center">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                        d="M6 17C6.53043 17 7.03914 17.2107 7.41421 17.5858C7.78929 17.9609 8 18.4696 8 19C8 19.5304 7.78929 20.0391 7.41421 20.4142C7.03914 20.7893 6.53043 21 6 21C5.46957 21 4.96086 20.7893 4.58579 20.4142C4.21071 20.0391 4 19.5304 4 19C4 18.4696 4.21071 17.9609 4.58579 17.5858C4.96086 17.2107 5.46957 17 6 17ZM6 17H12.5M6 17V3H4M6 5L20 6L19.14 12.017M16.5 13H6M16 19H22M19 16V22"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <div class="productCardAction" v-else>
+        <div class="productCardActionWrapper">
+          <div class="productCardActionsQtyAddMinus">
+            <div class="qtyAddMinusBtn">
+              <button @click="decreaseQuantity(currentProduct.id)"
+                      class="productCardButton"
+                      :class="{'__Disabled': getProductQty(currentProduct.id) < 1}"
+                      :disabled="getProductQty(currentProduct.id) === 0" v-haptic-engine>
+                <span class="qtyAddMinusBtnIcon">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3.33331 8H12.6666" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                          stroke-linejoin="round"/>
                   </svg>
-                </button>
+                </span>
+              </button>
+            </div>
+          </div>
+
+          <div class="productCardActionsQtyCount">
+            <div class="productCardActionsQtyCountWrapper">
+              <div class="productCardActionsQtyCountTitle"
+                   :class="{'add-to-cart': getProductQty(currentProduct.id) === 0}">
+                {{ getProductQty(currentProduct.id) === 0 ? 'Add to cart' : getProductQty(currentProduct.id) + ' Qty' }}
+                ~ {{ getProductQty(currentProduct.id) * currentProduct.price + '$' }}
               </div>
             </div>
           </div>
-          <!--            <button @click="checkoutProduct(currentProduct)" style="max-width: 14vh">В корзину</button>-->
+
+          <div class="productCardActionsQtyAdd">
+            <div class="qtyAddPlusBtn">
+              <button @click="handleIncrease(currentProduct)" class="productCardButton" v-haptic-engine>
+                <span class="qtyAddPlusBtnIcon">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7.99998 3.33333V12.6667M3.33331 8H12.6666" stroke="currentColor" stroke-width="2"
+                          stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </span>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
-
     </div>
   </div>
 </template>
@@ -215,7 +220,7 @@ const currentProduct = ref({
   attributes: [
     {name: "Color", value: "Black"}
   ],
-  price: 1120,
+  price: 120,
   currency: "$",
 });
 
@@ -408,7 +413,6 @@ h5 {
   border: solid 1px #eee;
   background: #eee;
   display: inline-flex;
-  padding: 6px 10px;
   border-radius: 16px;
   margin-bottom: 24px;
 }
@@ -442,23 +446,67 @@ h5 {
   left: 0;
   right: 0;
   width: 100%;
-  background: var(--bg-second-color);
   padding: 8px 16px;
   box-shadow: 0 -0.33px 0 #00000040;
   z-index: 99;
+  background: #fff;
+}
+
+/*.ProductFullFixedOrderBtn button {*/
+/*  height: 45px;*/
+/*  border-radius: 12px;*/
+/*  background: var(--bg-primary-color);*/
+/*  color: var(--bg-second-color);*/
+/*  font-size: 17px;*/
+/*  font-weight: 600;*/
+/*  width: 100%;*/
+/*  border: unset;*/
+/*  outline: unset;*/
+/*  focus: unset;*/
+/*}*/
+
+
+/**/
+
+
+.productCardActions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin: 10px 0;
+}
+
+.productCardAction {
+  background: #EFEFF4;
+  padding: 12px 16px;
   border-radius: 16px;
 }
 
-.ProductFullFixedOrderBtn button {
-  height: 45px;
-  border-radius: 12px;
-  background: var(--bg-primary-color);
-  color: var(--bg-second-color);
-  font-size: 17px;
+.productCardActionWrapper {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+}
+
+
+.productCardButton {
+  border: none;
+  background: transparent;
+  color: #C42323;
+}
+
+.productCardButton:disabled,
+.productCardButton.__Disabled {
+  color: #000000 !important;
+}
+
+.productCardActionsQtyCount .productCardActionsQtyCountTitle {
+  font-size: 12px;
   font-weight: 600;
-  width: 100%;
-  border: unset;
-  outline: unset;
-  focus: unset;
+}
+
+.productCardActionsQtyCountTitle.add-to-cart {
+  color: currentColor;
 }
 </style>

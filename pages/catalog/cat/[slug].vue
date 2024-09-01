@@ -14,7 +14,9 @@
         </div>
         <div class="MainCatalogBody">
           <div class="MainCatalogBodyWrapper" v-if="products.list && products.list.length > 0">
-            <CatalogPrdCardItem :product="product" v-for="product in products.list" :key="product.name"/>
+             <TransitionGroup name="fade">
+            <CatalogPrdCardItem :product="product" v-for="product in products.list" :key="product.name" class="animated animate_slideInUp" />
+             </TransitionGroup>
           </div>
           <CartFixedQtBtn/>
         </div>
