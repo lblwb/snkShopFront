@@ -3,7 +3,7 @@ import axios from 'axios';
 export default defineNuxtPlugin(nuxtApp => {
     // @ts-ignore
     const api = axios.create({
-        baseURL: 'https://qshbqw-185-23-238-13.ru.tuna.am/', // Установите базовый URL вашего API
+        baseURL: 'http://185.23.238.13/', // Установите базовый URL вашего API
     });
 
     // Добавьте интерцепторы для автоматической аутентификации
