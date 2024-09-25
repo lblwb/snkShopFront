@@ -12,42 +12,13 @@
         <div class="productCardName">{{ product.name }}</div>
       </div>
 
-      <div class="productCardAction">
-        <div class="productCardActionWrapper">
-          <div class="productCardActionsQtyAddMinus">
-            <div class="qtyAddMinusBtn">
-              <button @click="decreaseQuantity(product.idx)"
-                      class="productCardButton"
-                      :class="{'__Disabled': getProductQty(product.id) < 1}"
-                      :disabled="getProductQty(product.idx) === 0" v-haptic-engine>
-                <span class="qtyAddMinusBtnIcon">
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M3.33331 8H12.6666" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                          stroke-linejoin="round"/>
-                  </svg>
-                </span>
-              </button>
-            </div>
-          </div>
-
+      <div class="productCardAction" style="background: transparent; border: solid 1px var(--accent-second-color); padding: 8px">
+        <div class="productCardActionWrapper" style="justify-content: center">
           <div class="productCardActionsQtyCount">
             <div class="productCardActionsQtyCountWrapper">
-              <div class="productCardActionsQtyCountTitle" :class="{'add-to-cart': getProductQty(product.idx) === 0}">
-                {{ getProductQty(product.idx) === 0 ? 'Add to cart' : getProductQty(product.idx) + ' Qty' }}
+              <div class="productCardActionsQtyCountTitle" :class="{'add-to-cart': 1}" style="text-align: center; color: var(--accent-second-color);">
+                {{ 'Included in combo' }}
               </div>
-            </div>
-          </div>
-
-          <div class="productCardActionsQtyAdd">
-            <div class="qtyAddPlusBtn">
-              <button @click="handleIncrease(product)" class="productCardButton" v-haptic-engine>
-                <span class="qtyAddPlusBtnIcon">
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M7.99998 3.33333V12.6667M3.33331 8H12.6666" stroke="currentColor" stroke-width="2"
-                          stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </span>
-              </button>
             </div>
           </div>
         </div>
@@ -73,6 +44,10 @@ export interface Product {
   currency: string;
   price: number;
 }
+
+defineComponent({
+  name: 'CatComboPrdCardItem',
+})
 
 // @ts-ignore
 const props = defineProps<{

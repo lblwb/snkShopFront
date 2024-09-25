@@ -51,19 +51,27 @@
               </div>
             </div>
           </div>
-          <div class="bodyHeadingProductInfoTitle">
-            {{ currentProduct.title }}
-          </div>
-
-          <div class="bodyHeadingProductInfoTitle" style="font-size: 16px">
-            <span style="font-weight: 500;">Категории:</span>
-            {{ currentProduct.categories !== undefined ? currentProduct.categories.join(" ,") : "" }}
-          </div>
 
         </div>
         <!-- Product Order  -->
         <div class="bodyHeadingProductOrder">
+
           <div class="bodyHeadingProductOrderCard" style="margin-bottom: 96px">
+
+
+            <div class="bodyHeadingProductInfoCategory" style="margin-bottom: 20px">
+              <div class="productInfoCategoryWrapper" style="display: flex">
+                <div class="catalogHeaderBadge" v-if="currentProduct.categories !== null">
+                  {{ currentProduct.categories ? currentProduct.categories[0].name : '' }}
+                </div>
+              </div>
+            </div>
+
+            <div class="productInfoTitle">
+              {{ currentProduct.name }}
+            </div>
+
+
             <div class="productOrderCardWrapper">
               <div class="productOrderCardPrice" style="">
                 <div class="productOrderCardPriceWrapper">
@@ -80,40 +88,23 @@
 
             <!--                {{ currentProduct }}-->
 
-            <div class="bodyHeadingProductInfoDesc" style="margin-bottom: 32px">
+            <div class="bodyHeadingProductInfoDescText"
+                 v-if="currentProduct && currentProduct.description !== ''" style="margin-bottom: 32px">
+              <div class="bodyHeadingProductInfoDescTextContent" v-text="currentProduct.description"/>
+            </div>
+            <div class="bodyHeadingProductInfoDescText" v-else>
+              Not available
+            </div>
+
+            <div class="bodyHeadingProductInfoDesc" style="margin-bottom: 20px">
               <div class="bodyHeadingProductInfoDescHeadingTitle"
-                   style="font-weight: 600;font-size: 20px;margin-bottom: 16px;">
-                Описание:
+                   style="font-weight: 600;font-size: 18px;">
+                Detail:
               </div>
-
-              <div class="bodyHeadingProductInfoDescText"
-                   v-if="currentProduct && currentProduct.description !== ''">
-                <div class="bodyHeadingProductInfoDescTextContent" v-text="currentProduct.description"/>
-              </div>
-              <div class="bodyHeadingProductInfoDescText" v-else>
-                Отсутствует!
-              </div>
-
-
             </div>
 
             <div class="bodyHeadingProductInfoDesc">
-              <div class="bodyHeadingProductInfoDescHeadingTitle"
-                   style="font-weight: 600; font-size: 18px; margin-bottom: 10px">
-                Характеристики:
-              </div>
-
-              <div class="bodyHeadingProductInfoDescText"
-                   v-if="currentProduct && currentProduct.description !== ''">
-                <!--                    <div class="bodyHeadingProductInfoDescTextContent" v-text="currentProduct.description"/>-->
-
-
-              </div>
-              <div class="bodyHeadingProductInfoDescText" v-else>
-                Отсутствуют!
-              </div>
-              <div class="product__features"><!---->
-                <!--                      <div class="margin-32-top"><h5>характеристики</h5>-->
+              <div class="product__features">
                 <div class="product__feature" v-for="attr in currentProduct.attributes" :key="attr.code">
                   <div class="c-dark margin-16-right">{{ attr.name }}</div>
                   <div class="fw-bold">{{ attr.value }}</div>
@@ -121,6 +112,11 @@
               </div>
               <!---->
             </div>
+
+            <!--            <div class="bodyHeadingProductInfoDescHeadingTitle"-->
+            <!--                 style="font-weight: 600; font-size: 18px; margin-bottom: 10px">-->
+            <!--              How it Fits?-->
+            <!--            </div>-->
 
 
           </div>
@@ -193,36 +189,24 @@
 
 <script setup>
 import ProductFullSliderImages from "~/components/app/Main/Catalog/Product/ProductFullSliderImages.vue";
+import {useCartStore} from "~/stores/shop/cart/index";
+import {useShopPrdSingle} from "~/stores/shop/catalog/products/single.ts";
+import CatalogHeader from "~/components/app/Main/Catalog/CatalogHeader.vue";
 
 definePageMeta({
   layout: "twa-default",
 });
 
-import {getImageUrl} from "~/utils/assets/img";
-import {useCartStore} from "~/stores/shop/cart/index";
-
 const $router = useRouter();
 const $route = useRoute();
 const cartStore = useCartStore();
+const singleProductStore = useShopPrdSingle();
 
-
-// Определение списка продуктов
-const currentProduct = ref({
-  id: 15,
-  name: "New Balance NB 550 D",
-  image_src: getImageUrl("products/test.png"),
-  images: [{
-    original: getImageUrl("products/test.png")
-  }, {
-    original: getImageUrl("products/test.png")
-  }],
-  categories: [],
-  attributes: [
-    {name: "Color", value: "Black"}
-  ],
-  price: 120,
-  currency: "$",
+onMounted(async () => {
+  await singleProductStore.fetchPrdDetailBySlug($route.params.slug);
 });
+
+const currentProduct = computed(() => singleProductStore.getSingleProduct)
 
 
 const getProductQty = (productId) => cartStore.getProductQty(productId);
@@ -260,7 +244,6 @@ h5 {
 
 .product__feature {
   display: flex;
-  padding: 16px 0;
   border-bottom: 1px solid #eee;
   font-size: 14px;
 }
@@ -425,13 +408,17 @@ h5 {
 .bodyHeadingProductOrder .bodyHeadingProductOrderCard .productOrderCardPrice .productOrderCardPriceTitle {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
+  font-family: 'Inter', sans-serif;
   font-style: normal;
-  font-weight: 900;
-  font-size: 30px;
-  line-height: normal;
-  transition: all .3s linear;
-  color: var(--bg-primary-color);
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 29px;
+  /* identical to box height */
+  display: flex;
+  align-items: center;
+  letter-spacing: 0.08em;
+  color: #000000;
 }
 
 .bodyHeadingProductOrder .bodyHeadingProductOrderCard .productOrderCardPrice .productOrderCardPriceTitle > s {
@@ -508,5 +495,15 @@ h5 {
 
 .productCardActionsQtyCountTitle.add-to-cart {
   color: currentColor;
+}
+
+.productInfoTitle {
+  font-family: 'Roboto', sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 30px;
+  color: #272728;
+  margin-bottom: 18px;
 }
 </style>

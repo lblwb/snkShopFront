@@ -36,7 +36,7 @@ export const useCartStore = defineStore('cartStore', {
                 }
             } else {
                 // if add default product
-                const existingItem = this.items.find((item: { id: any; }) => item.id === product.id);
+                const existingItem = this.items.find((item: { idx: any; }) => item.idx === product.idx);
                 if (existingItem) {
                     existingItem.qty = (existingItem.qty || 0) + 1;
                 } else {
@@ -45,12 +45,12 @@ export const useCartStore = defineStore('cartStore', {
             }
         },
 
-        removeItem(productId: string) {
-            const index = this.items.findIndex((item: { id: string; }) => item.id === productId);
+        removeItem(productIdx: string) {
+            const index = this.items.findIndex((item: { idx: string; }) => item.idx === productIdx);
             console.log("removeItem", index);
             // console.log(this.items);
-            this.items.forEach((item: { id: string; }) => {
-                console.log(productId, item.id, item.id === productId)
+            this.items.forEach((item: { idx: string; }) => {
+                console.log(productIdx, item.idx, item.idx === productIdx)
             })
 
             // console.log("removeItem", this.items.find((item) => item.id === productId));
@@ -69,24 +69,24 @@ export const useCartStore = defineStore('cartStore', {
             this.comboId = null;
         },
 
-        increaseQty(productId: string) {
-            const item = this.items.find((item: { id: string; }) => item.id === productId);
+        increaseQty(productIdx: string) {
+            const item = this.items.find((item: { idx: string; }) => item.idx === productIdx);
             if (item) {
                 item.qty = (item.qty || 0) + 1;
             }
         },
 
-        decreaseQty(productId: string) {
-            const item = this.items.find((item: { id: string; }) => item.id === productId);
+        decreaseQty(productIdx: string) {
+            const item = this.items.find((item: { idx: string; }) => item.idx === productIdx);
             if (item && item.qty && item.qty > 1) {
                 item.qty -= 1;
             } else {
-                this.removeItem(productId);
+                this.removeItem(productIdx);
             }
         },
 
-        getProductQty(productId: string): number {
-            const item = this.items.find((item: { id: string; }) => item.id === productId);
+        getProductQty(productIdx: string): number {
+            const item = this.items.find((item: { idx: string; }) => item.idx === productIdx);
             return item ? item.qty || 0 : 0;
         },
 

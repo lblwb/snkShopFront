@@ -3,7 +3,7 @@
     <div class="catalogHeaderTitle">
       {{ title }} —
     </div>
-    <div class="catalogHeaderBadge">
+    <div class="catalogHeaderBadge" v-if="badge">
       {{ badge }}
     </div>
   </div>
@@ -27,7 +27,7 @@ defineComponent({
 })
 </script>
 
-<style scoped>
+<style>
 .catalogHeaderContainer {
   display: flex;
   align-items: center;
@@ -38,14 +38,19 @@ defineComponent({
 
 .catalogHeaderTitle {
   font-size: 16px;
-  font-weight: bold;
+  font-weight: 500;
 }
 
 .catalogHeaderBadge {
+  font-family: 'Inter', sans-serif;
   background-color: #000;
   color: #fff;
   padding: 5px 10px;
   border-radius: 15px;
+  /*font-size: 14px;*/
   font-size: 14px;
+  line-height: 18px;
+  font-style: normal;
+  font-weight: 600;
 }
 </style>

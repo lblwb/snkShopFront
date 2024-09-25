@@ -99,7 +99,7 @@
 
         <!--        <slot name="Body">-->
         <ClientOnly>
-<!--          <NuxtLoadingIndicator/>-->
+          <!--          <NuxtLoadingIndicator/>-->
           <LoadingBar/>
 
           <MiniApp/>

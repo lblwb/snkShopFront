@@ -4,7 +4,7 @@
     <!-- <img src="~/assets/images/roulete-loading.gif" alt="" style="max-width: 420px; max-height: 420px;"> -->
     <div class="loading_wrapper">
       <div class="loading_logo">
-        <img :src="getImageUrl('home/banner_home.png')" style="height: 14vh; max-height: 14vh">
+        <img src="/assets/images/home/banner_home.png" style="height: 14vh; max-height: 14vh">
       </div>
     </div>
   </div>
