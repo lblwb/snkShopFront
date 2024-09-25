@@ -1,6 +1,6 @@
 export function getImageUrl(name: any) {
 
-    const baseUrl = 'https://j36ej2-185-23-238-13.ru.tuna.am'
+    const baseUrl = 'https://qshbqw-185-23-238-13.ru.tuna.am'
 
     // @ts-ignore
     try {
