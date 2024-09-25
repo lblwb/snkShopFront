@@ -1,6 +1,6 @@
 export function getImageUrl(name: any) {
 
-    const baseUrl = 'http://185.23.238.13'
+    const baseUrl = 'https://back.rshop6854.xyz'
 
     // @ts-ignore
     try {
