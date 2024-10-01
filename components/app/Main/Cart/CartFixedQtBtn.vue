@@ -1,12 +1,12 @@
 <template>
-  <div class="cartFixedBar" v-if="cartStore.getTotalItems > 0" @click="$router.push({name: 'cart-checkout'})" v-haptic-engine>
+  <div class="cartFixedBar" v-if="reactiveCart.qty > 0" @click="$router.push({name: 'cart'})" v-haptic-engine>
     <button class="cartFixedBarBtn" style="">
       <div class="cartFixedBarBtnWrapper" style="display: flex; align-items: center; gap: 10px">
         <div class="cartFixedBarBtnTitle">
           Basket
         </div>
         <div class="cartFixedBarBtnBadge" style="">
-          {{ cartStore.getTotalItems + ' qty' }}
+          {{ reactiveCart.qty + ' qty' }}
         </div>
       </div>
     </button>
@@ -17,12 +17,22 @@
 import {useCartStore} from '~/stores/shop/cart/index';
 
 const cartStore = useCartStore();
-
 const $router = useRouter();
 
 defineComponent({
   name: 'CartFixedQtBtn',
+});
+
+const reactiveCart = reactive({
+  qty: computed(() => cartStore.getTotalItems)
+});
+
+
+watchEffect(() => {
+  // reactiveCart.qty = cartStore.getTotalItems;
 })
+
+
 </script>
 
 <style scoped>

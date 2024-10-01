@@ -46,7 +46,13 @@ export default defineNuxtConfig({
 
 
     //
-    modules: ["@pinia/nuxt", '@nuxt/image', '@nuxtjs/device'],
+    modules: [
+       // ['@nuxtjs/dotenv', { systemvars: true }],
+        "@pinia/nuxt", '@nuxt/image', '@nuxtjs/device'],
+
+    buildModules: [
+        '@nuxtjs/dotenv'
+    ],
 
     plugins: [
         "~/plugins/http/axios.ts",

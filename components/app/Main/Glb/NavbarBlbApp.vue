@@ -80,12 +80,18 @@ onMounted(() => {
   overflow-y: auto;
   gap: 0px 14px;
   position: relative;
+      -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  /* Firefox */
 }
 
 .navbarBlbAppListItemWrapper {
   display: flex;
   align-items: center;
   gap: 6px;
+}
+
+.navbarBlbAppList::-webkit-scrollbar {
+    display: none;
 }
 
 .navbarBlbAppListItem {

@@ -1,9 +1,14 @@
 import axios from 'axios';
 
+// @ts-ignore
+import {getBaseUrl} from "~/utils/baseUrl.ts";
+
 export default defineNuxtPlugin(nuxtApp => {
+    const baseUrl = getBaseUrl();
+    console.log(baseUrl);
     // @ts-ignore
     const api = axios.create({
-        baseURL: 'https://back.rshop6854.xyz/', // Установите базовый URL вашего API
+        baseURL:baseUrl, // Установите базовый URL вашего API
     });
 
     // Добавьте интерцепторы для автоматической аутентификации

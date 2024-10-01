@@ -4,16 +4,18 @@
   "type": "module",
   "scripts": {
     "build": "nuxt build",
-    "dev": "nuxt dev",
+    "dev": "export NODE_ENV=development && nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "prod": "nuxt build && nuxt generate"
+    "prod": "export NODE_ENV=production && nuxt build && nuxt generate"
   },
   "dependencies": {
+    "@nuxtjs/dotenv": "^1.4.2",
     "@pinia/nuxt": "^0.5.4",
     "animate.css": "^4.1.1",
     "axios": "^1.7.5",
+    "dotenv": "^16.4.5",
     "nuxt": "^3.13.0",
     "pinia": "^2.2.2",
     "vue": "latest",
