@@ -226,9 +226,14 @@ const checkoutCart = () => {
   background: rgb(255, 255, 255);
   min-height: 56px;
   display: flex;
-  align-items: center;
+   align-items: stretch;
   border: solid 1px #eee;
   border-radius: 16px;
+  overflow: hidden;
+}
+
+.listItemHeaderImg img {
+  object-fit: cover;
 }
 
 .listItemHeaderTitle {

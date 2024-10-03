@@ -10,7 +10,7 @@ export const useCartCheckoutStore = defineStore('cartCheckoutStore', {
                 console.debug("payload", payload.data);
                 const {$axios} = useNuxtApp();
                 // @ts-ignore
-                const result: { data: { success, order, error } } = await $axios.post(`/api/v1/order/checkout`, payload.data, {});
+                const result: { data: { success, order, error, payment_link } } = await $axios.post(`/api/v1/order/checkout`, payload.data, {});
                 //
                 console.debug("created-order", result);
 

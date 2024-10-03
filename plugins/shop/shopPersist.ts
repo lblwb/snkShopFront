@@ -5,6 +5,10 @@ export default defineNuxtPlugin(() => {
     const catShopStore = useShopCat();
     const shopProductRecom = useShopProductRecom();
     //
-    catShopStore.fetchAllCat();
-    shopProductRecom.fetchRecProducts();
+    useAsyncData(async () => {
+        await catShopStore.fetchAllCat();
+        await shopProductRecom.fetchRecProducts();
+    })
+
+
 });

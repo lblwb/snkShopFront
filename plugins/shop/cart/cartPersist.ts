@@ -1,20 +1,28 @@
 // plugins/cartPersist.ts
 import {useCartStore} from '~/stores/shop/cart/index';
 // @ts-ignore
-import {useWebAppCloudStorage, useWebAppHapticFeedback} from 'vue-tg';
+import {useWebAppCloudStorage, useWebApp} from 'vue-tg';
 
 export default defineNuxtPlugin(async () => {
     const {setStorageItem, getStorageItem} = useWebAppCloudStorage();
+    const webApp = useWebApp();
     const cartStore = useCartStore();
 
     let intBgUpdCart = null;
 
-    // Load cart from cloud storage
-    const loadCartFromCloudStorage = async () => {
+    // Function to load cart from storage (cloud or local)
+    const loadCart = async () => {
         try {
-            const cartData = await getStorageItem('shop_cart');
-            console.log("loadCartFromCloudStorage", cartData);
-
+            let cartData;
+            if (!webApp.isPlatformUnknown) {
+                // Use CloudStorage
+                cartData = await getStorageItem('shop_cart');
+                console.log('loadCartFromCloudStorage', cartData);
+            } else {
+                // Use localStorage
+                cartData = localStorage.getItem('shop_cart');
+                console.log('loadCartFromLocalStorage', cartData);
+            }
 
             if (cartData) {
                 const parsedData = JSON.parse(cartData);
@@ -22,45 +30,64 @@ export default defineNuxtPlugin(async () => {
                 cartStore.comboId = parsedData.comboId;
             }
         } catch (e) {
-            console.error("Error loading cart from cloud storage:", e);
+            console.error('Error loading cart from storage:', e);
         }
     };
 
-    // Save cart to cloud storage
-    const saveCartToCloudStorage = async () => {
+    // Function to save cart to storage (cloud or local)
+    const saveCart = async () => {
         try {
             const cartData = {
                 items: cartStore.items,
-                comboId: cartStore.comboId
+                comboId: cartStore.comboId,
             };
-            const result = await setStorageItem('shop_cart', JSON.stringify(cartData));
-            console.log("saveCartToCloudStorage", cartData, "result:", result);
+            const cartDataString = JSON.stringify(cartData);
+
+            if (!webApp.isPlatformUnknown) {
+                // Use CloudStorage
+                const result = await setStorageItem('shop_cart', cartDataString);
+                console.log('saveCartToCloudStorage', cartData, 'result:', result);
+            } else {
+                // Use localStorage
+                localStorage.setItem('shop_cart', cartDataString);
+                console.log('saveCartToLocalStorage', cartData);
+            }
         } catch (e) {
-            console.error("Error saving cart to cloud storage:", e);
+            console.error('Error saving cart to storage:', e);
         }
     };
 
-    const bgUpdStateCloudStorage = async () => {
+    // Function to periodically update cart from storage
+    const bgUpdStateStorage = async () => {
         intBgUpdCart = setInterval(async () => {
-            const cartData = await getStorageItem('shop_cart');
-            console.log("loadCartFromCloudStorage", cartData);
+            let cartData;
+            if (!webApp.isPlatformUnknown) {
+                // Use CloudStorage
+                cartData = await getStorageItem('shop_cart');
+                console.log('loadCartFromCloudStorage', cartData);
+            } else {
+                // Use localStorage
+                cartData = localStorage.getItem('shop_cart');
+                console.log('loadCartFromLocalStorage', cartData);
+            }
+
             if (cartData) {
                 const parsedData = JSON.parse(cartData);
-                if (cartStore.items !== parsedData.items) {
+                if (JSON.stringify(cartStore.items) !== JSON.stringify(parsedData.items)) {
                     cartStore.items = parsedData.items;
                     cartStore.comboId = parsedData.comboId;
                 }
             }
         }, 5000);
-    }
+    };
 
-    // await bgUpdStateCloudStorage();
+    // await bgUpdStateStorage();
 
     // Load cart when the plugin is initialized
-    await loadCartFromCloudStorage();
+    await loadCart();
 
-    // Save cart to cloud storage when cartStore changes
+    // Save cart to storage when cartStore changes
     cartStore.$subscribe(async () => {
-        await saveCartToCloudStorage();
+        await saveCart();
     });
 });

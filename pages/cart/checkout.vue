@@ -52,6 +52,20 @@
              v-if="InputSelPayment.selected == undefined || InputSelPayment.selected == null">select method</label>
     </div>
 
+    <div class="CartCheckoutAddress" style="margin-bottom: 18px">
+      <label for="InputAddress" style="margin-bottom: 8px; display: block;">Delivery Address</label>
+      <input placeholder="Enter promo code" style="
+    padding: 14px 14px;
+    background: #fff;
+    border-radius: 6px;
+    width: 100%;
+    border: solid 1px #EFEFF4;
+    font-size: 14px;
+    font-weight: 500;
+    opacity: 0.6;
+" v-model="InputAddress.value">
+    </div>
+
     <div class="CartCheckoutPromocode" style="margin-bottom: 18px">
       <label for="InputPromocode" style="margin-bottom: 8px; display: block;">Promo code</label>
       <input placeholder="Enter promo code" style="
@@ -76,18 +90,18 @@
         conditions</label>
     </div>
 
-    <div class="transferBlockWrapper"
-         v-if="InputConfirmTerm.checked
-         && InputSelPayment.selected !== undefined
-         && InputSelPayment.selected !== null
-          && InputSelPayment.selected.id === 'transfer'"
-         style="margin-bottom: 24px"
-    >
-      <BlockBTransfer v-if="InputSelPayment.selected" :chckAmount="cartPrice"
-                      v-model:transferInfo="InputSelPayment.transferInfo"/>
-    </div>
+    <!--    <div class="transferBlockWrapper"-->
+    <!--         v-if="InputConfirmTerm.checked-->
+    <!--         && InputSelPayment.selected !== undefined-->
+    <!--         && InputSelPayment.selected !== null-->
+    <!--          && InputSelPayment.selected.id === 'transfer'"-->
+    <!--         style="margin-bottom: 24px"-->
+    <!--    >-->
+    <!--      <BlockBTransfer v-if="InputSelPayment.selected" :chckAmount="cartPrice"-->
+    <!--                      v-model:transferInfo="InputSelPayment.transferInfo"/>-->
+    <!--    </div>-->
 
-    {{ InputSelPayment }}
+    <!--    {{ InputSelPayment }}-->
 
     <!--  Checkout  -->
     <div class="CartCheckoutFooter">
@@ -139,14 +153,16 @@ const checkoutBtn = reactive({
 const InputSelPayment = reactive({
   list: [
     {id: 'transfer', name: 'Bank Transfer'},
+    {id: 'crypto', name: 'Pay Crypto'},
     {id: 'csh_del', name: 'Cash on Delivery'},
-    {id: 'wallet_app', name: '@Wallet (mini app)'},
-    {id: 'ton_wallet', name: 'Ton Wallet'}
+    // {id: 'wallet_app', name: '@Wallet (mini app)'},
+    // {id: 'ton_wallet', name: 'Ton Wallet'}
   ],
   selected: null,
   transferInfo: null
 });
 
+const InputAddress = reactive({value: null});
 const InputConfirmTerm = reactive({
   checked: false
 })
@@ -167,45 +183,81 @@ const setShowTgBtnCheckout = (status) => {
 }
 
 const checkoutCartData = async () => {
+
   console.log(InputSelPayment.selected);
   //
-  const paymentMethod = toRaw(InputSelPayment.transferInfo);
-  if (paymentMethod !== null) {
-    const {success} = await cartCheckoutStore.fetchOrderCheckout({
-      data: {
-        items: cartItems.value,
-        total_price: cartPrice.value,
-        pm: paymentMethod.idx
-      }
-    });
-    // console.log("result", result);
 
-    const success_msg = "Order created. Waiting confirmation for payment.";
-    const not_created_msg = "Order not created. Retry later.";
-
+  const deliveryAddress = toRaw(InputAddress.value);
+  if (deliveryAddress == null || deliveryAddress.length < 3) {
+    const msg_warn = "Please enter delivery address!";
     //
-    if (success) {
-      if (!appWeb.isPlatformUnknown) {
-        await appPopup.showAlert(success_msg)
-      } else {
-        alert(success_msg)
-      }
-
-      //
-      await $router.push({name: 'index'});
-
-      // Clear cart
-      clearCart();
-
-      // await $router.push({name: 'checkout-order', params: {id: order.id}})
+    if (!appWeb.isPlatformUnknown) {
+      await appPopup.showAlert(msg_warn);
+      return;
     } else {
-      if (!appWeb.isPlatformUnknown) {
-        await appPopup.showAlert(not_created_msg);
-      } else {
-        alert(not_created_msg);
-      }
+      await alert(msg_warn);
+      return;
     }
   }
+
+  const paymentMethod = toRaw(InputSelPayment.transferInfo);
+  //
+  const {success, payment_link} = await cartCheckoutStore.fetchOrderCheckout({
+    data: {
+      ptype: InputSelPayment.selected.id,
+      //
+      items: cartItems.value,
+      total_price: cartPrice.value,
+      // pm: paymentMethod.idx,
+      address: InputAddress.value,
+    }
+  });
+
+  console.log(paymentMethod, "payment_link", payment_link);
+
+  // console.log("result", result);
+
+  const success_msg = "Order created. Waiting confirmation for payment.";
+  const redirect_payment_page_msg = "Order created. Redirect to payment page.";
+  const not_created_msg = "Order not created. Retry later.";
+
+  //
+  if (success) {
+
+    if (InputSelPayment.selected.id === "crypto") {
+      window.open(payment_link, '_blank').focus();
+
+      if (!appWeb.isPlatformUnknown) {
+        await appPopup.showAlert(redirect_payment_page_msg)
+      } else {
+        alert(redirect_payment_page_msg)
+      }
+      //
+      clearCart();
+      return;
+    }
+
+    // Clear cart
+    clearCart();
+
+    if (!appWeb.isPlatformUnknown) {
+      await appPopup.showAlert(success_msg)
+    } else {
+      alert(success_msg);
+    }
+
+    //
+    await $router.push({name: 'index'});
+
+    // await $router.push({name: 'checkout-order', params: {id: order.id}})
+  } else {
+    if (!appWeb.isPlatformUnknown) {
+      await appPopup.showAlert(not_created_msg);
+    } else {
+      alert(not_created_msg);
+    }
+  }
+  // }
 }
 
 

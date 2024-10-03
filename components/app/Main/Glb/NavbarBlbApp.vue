@@ -102,6 +102,7 @@ onMounted(() => {
   position: relative;
   z-index: 1;
   display: flex;
+  cursor: pointer;
 }
 
 .navbarBlbAppListItem.__Main {
@@ -133,6 +134,12 @@ onMounted(() => {
   -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: destination-out;
   mask-composite: exclude;
+}
+
+.navbarBlbAppListItem:hover,
+.navbarBlbAppListItem:focus{
+  background: var(--bg-accent-color);
+  opacity: 0.7;
 }
 
 .navbarBlbAppListItemIcon {

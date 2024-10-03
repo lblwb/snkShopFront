@@ -10,7 +10,7 @@
       <MainStartBtnsGroup/>
     </div>
 
-     <div class="MainStartBtnWrapper MainStartBtnWrapper--mb-24">
+    <div class="MainStartBtnWrapper MainStartBtnWrapper--mb-24">
       <MainTwoStartBtnsGroup/>
     </div>
 
@@ -32,9 +32,21 @@ import MainTwoStartBtnsGroup from "~/components/app/Main/Glb/Btn/MainTwoStartBtn
 import CartFixedQtBtn from "~/components/app/Main/Cart/CartFixedQtBtn.vue";
 import RecomProd from "~/components/app/Main/Catalog/RecomProd.vue";
 
+import {useShopCat} from "~/stores/shop/catalog/categories/index";
+import {useShopProductRecom} from "~/stores/shop/catalog/products/recom";
+
+
 definePageMeta({
   layout: "twa-default",
 })
+
+const catShopStore = useShopCat();
+const shopProductRecom = useShopProductRecom();
+
+// useAsyncData(async () => {
+//   await catShopStore.fetchAllCat();
+//   await shopProductRecom.fetchRecProducts();
+// });
 
 </script>
 
