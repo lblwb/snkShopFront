@@ -29,7 +29,7 @@ export const useShopCat = defineStore('shopCatStore', {
     },
     getters: {
         getAllCat(): any {
-            return this.cat.all.data;
+            return this.cat.all.data.length > 0 ? this.cat.all.data : [];
         }
     }
 });

@@ -25,7 +25,7 @@ defineComponent({
 const shopProductRecom = useShopProductRecom();
 
 const productsRec = reactive({
-  list: computed(() => shopProductRecom.getProductsRecAll).value
+  list: computed(() => shopProductRecom.getProductsRecAll)
 })
 
 onMounted(async () => {

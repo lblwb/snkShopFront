@@ -56,7 +56,7 @@ const $route = useRoute();
 
 let catg = reactive({
   all: {
-    data: storeShopCat.getAllCat ? computed(() => storeShopCat.getAllCat).value : []
+    data: storeShopCat.getAllCat !== null ? computed(() => storeShopCat.getAllCat) : []
   }
 });
 
@@ -80,8 +80,8 @@ onMounted(() => {
   overflow-y: auto;
   gap: 0px 14px;
   position: relative;
-      -ms-overflow-style: none;  /* Internet Explorer 10+ */
-    scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none; /* Firefox */
 }
 
 .navbarBlbAppListItemWrapper {
@@ -91,7 +91,7 @@ onMounted(() => {
 }
 
 .navbarBlbAppList::-webkit-scrollbar {
-    display: none;
+  display: none;
 }
 
 .navbarBlbAppListItem {
@@ -137,7 +137,7 @@ onMounted(() => {
 }
 
 .navbarBlbAppListItem:hover,
-.navbarBlbAppListItem:focus{
+.navbarBlbAppListItem:focus {
   background: var(--bg-accent-color);
   opacity: 0.7;
 }
