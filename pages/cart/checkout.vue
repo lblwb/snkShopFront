@@ -170,16 +170,16 @@ const InputConfirmTerm = reactive({
 appMainButton.onMainButtonClicked(() => checkoutCart())
 
 const setShowTgBtnCheckout = (status) => {
-  if (status) {
-    appMainButton.setMainButtonParams({
-      text: "Checkout",
-      color: "#C42323",
-      is_active: true
-    });
-    appMainButton.showMainButton();
-  } else {
-    appMainButton.hideMainButton();
-  }
+  // if (status) {
+  //   appMainButton.setMainButtonParams({
+  //     text: "Checkout",
+  //     color: "#C42323",
+  //     is_active: true
+  //   });
+  //   appMainButton.showMainButton();
+  // } else {
+  //   appMainButton.hideMainButton();
+  // }
 }
 
 const checkoutCartData = async () => {
@@ -275,17 +275,17 @@ onMounted(() => {
     $router.push({name: 'index'});
     appPopup.showAlert("Cart is empty.")
   } else {
-    setShowTgBtnCheckout(true)
+    // setShowTgBtnCheckout(true)
   }
 })
 
 onBeforeRouteLeave(() => {
-  setShowTgBtnCheckout(false)
+  // setShowTgBtnCheckout(false)
 })
 
 const clearCart = () => {
   cartStore.clearCart();
-  setShowTgBtnCheckout(false);
+  // setShowTgBtnCheckout(false);
   //
   $router.push({name: 'index'});
 }
