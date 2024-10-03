@@ -115,10 +115,11 @@ const cartQtyItem = computed(() => cartStore.getTotalItems)
 const cartPrice = computed(() => cartStore.getTotalPrice)
 
 const checkoutBtn = reactive({
-  show: computed(() => appWeb.isPlatformUnknown)
+  // show: computed(() => appWeb.isPlatformUnknown)
+  show: true
 })
 
-appMainButton.onMainButtonClicked(() => checkoutCart())
+// appMainButton.onMainButtonClicked(() => checkoutCart())
 
 const setShowTgBtnCheckout = (status) => {
   if (status) {
@@ -139,7 +140,7 @@ watchEffect(() => {
     $router.push({name: 'index'});
     appPopup.showAlert("Cart is empty.")
   } else {
-    setShowTgBtnCheckout(true)
+    // setShowTgBtnCheckout(true)
   }
 });
 
@@ -148,17 +149,17 @@ onMounted(() => {
     $router.push({name: 'index'});
     appPopup.showAlert("Cart is empty.")
   } else {
-    setShowTgBtnCheckout(true)
+    //setShowTgBtnCheckout(true)
   }
 })
 
 onBeforeRouteLeave(() => {
-  setShowTgBtnCheckout(false)
+  //setShowTgBtnCheckout(false)
 })
 
 const clearCart = () => {
   cartStore.clearCart();
-  setShowTgBtnCheckout(false);
+  //setShowTgBtnCheckout(false);
   //
   $router.push({name: 'index'});
 }
