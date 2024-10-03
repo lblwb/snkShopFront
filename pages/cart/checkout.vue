@@ -28,7 +28,7 @@
       </div>
 
       <div class="CartCheckoutHeadingAmount">
-        Total amount: <span>{{ cartPrice }}$</span>
+        Total amount: <span>{{ cartPrice }} €</span>
       </div>
 
     </div>

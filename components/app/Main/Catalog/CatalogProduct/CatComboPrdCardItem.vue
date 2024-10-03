@@ -8,7 +8,7 @@
         <div class="productCardImg">
           <img :src="getImageUrl(product.image_src)" :alt="product.name" class="productCardImage"/>
         </div>
-        <div class="productCardPrice">{{ product.price }}$</div>
+        <div class="productCardPrice">{{ product.price }}€</div>
         <div class="productCardName">{{ product.name }}</div>
       </div>
 

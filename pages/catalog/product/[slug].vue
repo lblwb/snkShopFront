@@ -80,7 +80,7 @@
                     {{
                       currentProduct && currentProduct.price && currentProduct.price !== undefined ? currentProduct.price : 0
                     }}
-                    <span style="font-family: 'Roboto',sans-serif">$</span>
+                    <span style="font-family: 'Roboto',sans-serif">€</span>
                   </div>
                 </div>
               </div>
@@ -162,7 +162,7 @@
               <div class="productCardActionsQtyCountTitle"
                    :class="{'add-to-cart': getProductQty(currentProduct.id) === 0}">
                 {{ getProductQty(currentProduct.id) === 0 ? 'Add to cart' : getProductQty(currentProduct.id) + ' Qty' }}
-                ~ {{ getProductQty(currentProduct.id) * currentProduct.price + '$' }}
+                ~ {{ getProductQty(currentProduct.id) * currentProduct.price + '€' }}
               </div>
             </div>
           </div>

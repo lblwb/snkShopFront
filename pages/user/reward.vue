@@ -1,6 +1,6 @@
 <template>
   <div class="CatalogBodyWrapper">
-    Reward
+
   </div>
 </template>
 

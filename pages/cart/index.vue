@@ -25,7 +25,7 @@
       </div>
 
       <div class="CartCheckoutHeadingAmount">
-        Total amount: <span>{{ cartPrice }}$</span>
+        Total amount: <span>{{ cartPrice }} €</span>
       </div>
 
     </div>
@@ -210,7 +210,8 @@ const checkoutCart = () => {
   left: 0;
   max-width: 480px;
   margin: 0 auto;
-  min-height: 64vh;
+  min-height: 50vh;
+  max-height: 50vh;
   box-shadow: rgb(0 0 0 / 5%) 0px -9px 12px 10px;
 }
 
@@ -226,7 +227,7 @@ const checkoutCart = () => {
   background: rgb(255, 255, 255);
   min-height: 56px;
   display: flex;
-   align-items: stretch;
+  align-items: stretch;
   border: solid 1px #eee;
   border-radius: 16px;
   overflow: hidden;
@@ -256,6 +257,28 @@ const checkoutCart = () => {
   background: var(--bg-second-color);
   padding: 2px 8px;
   border-radius: 16px;
+}
+
+.CartCheckoutList {
+  display: flex;
+  flex-flow: column;
+  gap: 24px;
+  max-height: 86vh;
+  overflow: hidden auto;
+  height: 100%;
+  min-height: 50vh;
+}
+
+@media screen and (max-width: 360px) {
+  .CartCheckoutList {
+    display: flex;
+    flex-flow: column;
+    gap: 24px;
+    max-height: 86vh;
+    overflow: hidden auto;
+    height: 100%;
+    min-height: 36vh;
+  }
 }
 
 .CartCheckoutListItem {

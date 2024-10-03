@@ -203,6 +203,9 @@ const showGroupTelegram = () => {
   background: linear-gradient(180deg, #F64D4D 0%, #D33E86 100%);
   border: 1px solid #FFFFFF;
   border-radius: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center
 }
 
 .userBarInfoName {

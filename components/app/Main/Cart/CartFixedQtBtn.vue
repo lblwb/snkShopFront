@@ -38,7 +38,7 @@ watchEffect(() => {
 <style scoped>
 .cartFixedBar {
   position: fixed;
-  bottom: 8vh;
+  bottom: 4vh;
   left: 8px;
   right: 8px;
   margin: 0 auto;
