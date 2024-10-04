@@ -59,8 +59,31 @@ defineProps({
 
 .fullBodyImagesItemImage {
   position: relative;
-  padding-bottom: 70%;
   width: calc(100vw - 24px);
   display: block;
+  padding: 18vh;
+  overflow: hidden;
 }
+
+.ProductFullBodyImagesItem .fullBodyImagesItemImage img {
+  position: absolute;
+  height: 100%;
+  inset: 0px;
+  color: transparent;
+  border-radius: 20px;
+  background: rgb(255, 255, 255);
+  object-fit: cover;
+  object-position: center;
+}
+
+.ProductFullBodyImagesItem:only-child .fullBodyImagesItemImage img {
+  min-width: 100%;
+  max-width: 100%;
+}
+
+.ProductFullBodyImagesItem:has(> li:only-child) .fullBodyImagesItemImage img {
+  min-width: 26vh;
+  max-width: 30vh;
+}
+
 </style>

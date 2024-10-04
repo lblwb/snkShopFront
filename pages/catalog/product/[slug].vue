@@ -59,10 +59,26 @@
           <div class="bodyHeadingProductOrderCard" style="margin-bottom: 96px">
 
 
-            <div class="bodyHeadingProductInfoCategory" style="margin-bottom: 20px">
+            <div class="bodyHeadingProductInfoCategory" style="margin-bottom: 20px"
+                 v-if="currentProduct.categories !== null">
               <div class="productInfoCategoryWrapper" style="display: flex">
-                <div class="catalogHeaderBadge" v-if="currentProduct.categories !== null">
-                  {{ currentProduct.categories ? currentProduct.categories[0].name : '' }}
+                <div class="catalogHeaderBadge"
+                     v-if="currentProduct.categories !== null">
+                  <div class="catalogHeaderBadgeWrapper" style="display: flex;flex-flow: row wrap;gap: 8px;align-items: center;">
+                    <div class="catalogHeaderBadgeHeader">
+                      <div class="badgeHeaderTitle" style="font-weight: 400;">
+                        Category:
+                      </div>
+                    </div>
+                    <div class="catalogHeaderBadgeItem" v-for="(category, index) in currentProduct.categories"
+                         @click="$router.push({name: 'catalog-cat-slug', params:{slug: category.slug}})" style="cursor: pointer; color: var(--accent-second-color);">
+                      <div class="catalogHeaderBadgeItemWrap" style="display: flex;">
+                        <div class="catalogHeaderBadgeItemTitle">{{ category !== null ? category.name : '' }}</div>
+                        <div class="catalogHeaderBadgeItemSep" v-if="(index < currentProduct.categories.length - 1)">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -505,5 +521,11 @@ h5 {
   line-height: 30px;
   color: #272728;
   margin-bottom: 18px;
+}
+
+.catalogHeaderBadgeItemSep {
+  border-right: 2px solid var(--text-second-color);
+  rotate: 18deg;
+  margin-left: 9px;
 }
 </style>

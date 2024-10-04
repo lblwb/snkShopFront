@@ -6,7 +6,7 @@
         <div class="CartCheckoutHeadingInfoWrapper"
              style="display: flex; justify-content: space-between; align-items: center;">
           <div class="CartCheckoutHeadingTitle">
-            Checkout cart - {{ cartQtyItem }} Qty.
+            Basket - {{ cartQtyItem }} Qty.
           </div>
           <div class="CartCheckoutHeadingInfoAction">
             <button @click="clearCart" class="headingInfoActionClearBtn"
@@ -31,9 +31,7 @@
     </div>
 
     <div class="CartCheckoutBody">
-      <div class="CartCheckoutList"
-           style="display: flex; flex-flow: column; gap: 24px; max-height: 86vh; overflow-x: hidden; overflow-y: auto; height: 100%;
-  min-height: 50vh;">
+      <div class="CartCheckoutList">
         <div class="CartCheckoutListItem" v-for="cartItem in cartItems" style="">
           <!--          {{cartItem}}-->
           <div class="CartCheckoutListItemHeader"
@@ -84,7 +82,7 @@
         <div class="CartCheckoutFooterBtn" v-if="checkoutBtn.show" @click="$router.push({name: 'cart-checkout'})"
              v-haptic-engine
         >
-          Pay
+          Checkout
         </div>
       </div>
     </div>
@@ -270,7 +268,7 @@ const checkoutCart = () => {
   min-height: 50vh;
 }
 
-@media screen and (max-width: 360px) {
+@media screen and (max-width: 380px) {
   .CartCheckoutList {
     display: flex;
     flex-flow: column;
