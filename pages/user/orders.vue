@@ -28,32 +28,27 @@
           <div class="CartCheckoutListItemHeader"
                style="display: flex; justify-content: space-between; align-items: center;">
             <div class="listItemHeaderWrapper" style="display: flex; align-items: center; gap: 16px;">
-              <div class="listItemHeaderImg"
-                   style="max-width: 56px; width: 100%; height: 100%; max-height: 56px; background: #fff; border-radius: 16px;">
-                <img :src="getImageUrl(cartItem.image_src)" :alt="cartItem.name" style="width: 100%; height: auto"
-                     v-if="cartItem.image_src">
-              </div>
               <div class="listItemHeaderInfo">
-                <div class="listItemHeaderTitle">
-                  {{ cartItem.name }}
+                <div class="listItemHeaderTitle" style="font-size: 14px;">
+                  {{ cartItem.delivery_address }}
                 </div>
               </div>
 
 
             </div>
             <div class="listItemHeaderIcon">
+              {{ getDateOrder(cartItem) }}
             </div>
+          </div>
+          <div class="listItemStatus" style="padding: 4px 0;">
+            {{ getStatusOrder(cartItem) }}
           </div>
           <div class="listItemFooter" style="padding: 2px 0">
             <div class="listItemFooterWrap"
                  style="display: flex; align-items: center; gap: 16px; justify-content: right">
               <div class="listItemFooterInfo" style="">
-                <div class="listItemFooterInfoQty" style="
-
-">
-                  {{
-                    cartItem.price !== null && cartItem.qty > 0 ? (cartItem.price * cartItem.qty) + ' ' + cartItem.currency : ''
-                  }}
+                <div class="listItemFooterInfoQty">
+                  {{ cartItem.total_amount !== null ? cartItem.total_amount + '€' : '' }}
                 </div>
 
               </div>
@@ -68,86 +63,43 @@
 </template>
 
 <script setup>
-import {useCartStore} from '~/stores/shop/cart/index';
+// import {useCartStore} from '~/stores/shop/cart/index';
 import {MainButton, useWebAppMainButton, useWebAppPopup, useWebApp} from "vue-tg";
-//import {getImageUrl} from "~/utils/assets/img";
-import SelectBtnCityList from "~/components/app/Main/Form/SelectBtnCityList.vue";
-import {useCartCheckoutStore} from "~/stores/shop/cart/checkout/index";
+import {useUserOrdersStore} from "~/stores/user/orders/userOrders";
 import {getImageUrl} from "~/utils/assets/img";
-
 
 definePageMeta({
   layout: 'twa-default'
 })
 
-
-const appWeb = useWebApp();
-const appMainButton = useWebAppMainButton();
-const appPopup = useWebAppPopup();
-
-const cartOrdersItems = reactive([
-  {
-    name: 'Order #43443',
-    image_src: getImageUrl('test.png'),
-    price: 100
-  },
-  {
-    name: 'Order #43443',
-    image_src: getImageUrl('test.png'),
-    price: 100
-  },
-  {
-    name: 'Order #43443',
-    image_src: getImageUrl('test.png'),
-    price: 100
-  },
-  {
-    name: 'Order #43443',
-    image_src: getImageUrl('test.png'),
-    price: 100
-  },
-
-  {
-    name: 'Order #43443',
-    image_src: getImageUrl('test.png'),
-    price: 100
-  },
-      {
-    name: 'Order #43443',
-    image_src: getImageUrl('test.png'),
-    price: 100
-  },
-])
-
-
 const $router = useRouter();
+const $route = useRoute();
 
+const userOrdersStore = useUserOrdersStore();
+const cartOrdersItems = computed(() => userOrdersStore.getUserOrders)
 
-const cartStore = useCartStore();
-const cartItems = computed(() => cartStore.getItems)
-const cartQtyItem = computed(() => cartStore.getTotalItems)
-const cartPrice = computed(() => cartStore.getTotalPrice)
-//
-const cartCheckoutStore = useCartCheckoutStore();
+useAsyncData(() => {
+  userOrdersStore.fetchOrdersByUserAcc();
+})
 
+const getStatusOrder = (order) => {
+  if (!order) {
+  }
+  if (order.status === 'pending') {
+    return 'Pending'
+  }
+}
 
-// watchEffect(() => {
-//   if (cartQtyItem.value === 0) {
-//     $router.push({name: 'index'});
-//     appPopup.showAlert("Cart is empty.")
-//   } else {
-//     setShowTgBtnCheckout(true)
-//   }
-// });
+const getDateOrder = (order) => {
+  try {
+    //parse: 2024-10-03T01:22:03.525255Z
+    let date = new Date(order.created_at);
+    return date.toDateString();
+  } catch (e) {
+    return "-";
+  }
 
-// onMounted(() => {
-//   if (cartQtyItem.value === 0) {
-//     $router.push({name: 'index'});
-//     appPopup.showAlert("Cart is empty.")
-//   } else {
-//     setShowTgBtnCheckout(true)
-//   }
-// })
+}
 
 </script>
 
