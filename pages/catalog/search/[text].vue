@@ -9,10 +9,10 @@
              style="margin-bottom: 2vh">
           <CatalogHeader title="Search product by" :badge="currentCat.title"/>
         </div>
-        <div class="MainCatalogBody" v-if="currentTextProducts && currentTextProducts.length > 0">
+        <div class="MainCatalogBody" v-if="currentProductsByText && currentProductsByText.length > 0">
           <div class="MainCatalogBodyWrapper">
             <TransitionGroup name="fade">
-              <CatalogPrdCardItem :product="product" v-for="product in currentTextProducts" :key="product.name"
+              <CatalogPrdCardItem :product="product" v-for="product in currentProductsByText" :key="product.name"
                                   class="animated animate_slideInUp"/>
             </TransitionGroup>
           </div>
@@ -47,7 +47,7 @@ import CatalogPrdCardItem from "~/components/app/Main/Catalog/CatalogProduct/Cat
 import CartFixedQtBtn from "~/components/app/Main/Cart/CartFixedQtBtn.vue";
 import CatalogHeader from "~/components/app/Main/Catalog/CatalogHeader.vue";
 import {useShopSearchPrd} from "~/stores/shop/catalog/products/search/index";
-import RecomProd from "~/components/app/Main/Catalog/RecomProd.vue";
+// import RecomProd from "~/components/app/Main/Catalog/RecomProd.vue";
 
 
 definePageMeta({
@@ -82,7 +82,7 @@ onMounted(async () => {
   }
 })
 
-const currentTextProducts = computed(() => shopProductSearch.getPrdByCat);
+const currentProductsByText = shopProductSearch.getPrdBySchTextData;
 const currentCat = {title: shopProductSearch.getPrdSchText};
 
 </script>

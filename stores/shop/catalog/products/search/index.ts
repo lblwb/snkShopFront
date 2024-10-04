@@ -40,7 +40,7 @@ export const useShopSearchPrd = defineStore('shopShopSearchPrd', {
         },
     },
     getters: {
-        getPrdBySchText(): any {
+        getPrdBySchTextData(): any {
             return this.products.search.data;
         },
         getPrdSchText(): string {

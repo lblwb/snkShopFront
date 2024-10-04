@@ -87,14 +87,9 @@ const performSearch = async (e) => {
     })
   }
 
-
-  // Здесь можно добавить логику для выполнения поиска, например, вызов API
 };
 
-// Создаём дебаунсированную версию функции поиска
-const debouncedHandleSearch = debounce(await performSearch, 400);
-
-// Обработчик для нажатия Enter
+const debouncedHandleSearch = debounce(await performSearch, 800);
 const handleSearch = () => {
   performSearch();
 };
