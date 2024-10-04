@@ -4,13 +4,15 @@
 
     <div class="MainCatalog MainCatalog--mb-160" style="margin-bottom: 8vh">
       <div class="MainCatalogWrapper">
-        <div class="MainCatalogHeading" v-if="currentCat !== null" style="margin-bottom: 2vh">
-          <CatalogHeader title="Category" :badge=" currentCat.name"/>
+        <!--        {{ currentCat }}-->
+        <div class="MainCatalogHeading" v-if="currentCat !== null && currentCat.title"
+             style="margin-bottom: 2vh">
+          <CatalogHeader title="Search product by" :badge="currentCat.title"/>
         </div>
-        <div class="MainCatalogBody" v-if="currentCatProducts && currentCatProducts.length > 0">
+        <div class="MainCatalogBody" v-if="currentTextProducts && currentTextProducts.length > 0">
           <div class="MainCatalogBodyWrapper">
             <TransitionGroup name="fade">
-              <CatalogPrdCardItem :product="product" v-for="product in currentCatProducts" :key="product.name"
+              <CatalogPrdCardItem :product="product" v-for="product in currentTextProducts" :key="product.name"
                                   class="animated animate_slideInUp"/>
             </TransitionGroup>
           </div>
@@ -24,7 +26,8 @@
 "> ... Adding new products</span>
             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-layout-cards"
                  viewBox="0 0 24 24"
-                 stroke-width="2" stroke="var(--text-second-color)" fill="none" stroke-linecap="round" stroke-linejoin="round"
+                 stroke-width="2" stroke="var(--text-second-color)" fill="none" stroke-linecap="round"
+                 stroke-linejoin="round"
                  height="10em" width="10em" style="color: var(--accent-comp-low-color);">
               <path d="M0 0h24v24H0z" stroke="none"/>
               <rect x="4" y="4" width="6" height="16" rx="2"/>
@@ -35,11 +38,6 @@
         </div>
       </div>
     </div>
-
-    <template v-if="currentCatProducts.length > 8">
-      <RecomProd/>
-    </template>
-
     <CartFixedQtBtn/>
   </div>
 </template>
@@ -48,8 +46,9 @@
 import CatalogPrdCardItem from "~/components/app/Main/Catalog/CatalogProduct/CatalogPrdCardItem.vue";
 import CartFixedQtBtn from "~/components/app/Main/Cart/CartFixedQtBtn.vue";
 import CatalogHeader from "~/components/app/Main/Catalog/CatalogHeader.vue";
-import {useShopPrdCat} from "~/stores/shop/catalog/products/cat.ts";
+import {useShopSearchPrd} from "~/stores/shop/catalog/products/search/index";
 import RecomProd from "~/components/app/Main/Catalog/RecomProd.vue";
+
 
 definePageMeta({
   layout: 'twa-default'
@@ -59,23 +58,32 @@ definePageMeta({
 const $router = useRouter();
 const $route = useRoute();
 
-const shopProductCat = useShopPrdCat();
 
-// watchEffect(async () => {
-//   if ($route.params.slug !== null) {
-//     let routerCategorySlug = $route.params.slug;
-//     await shopProductCat.fetchByCatSlug(routerCategorySlug);
-//   }
-// })
+const routerPrdSrhText = computed(() => $route.params.text);
 
-onMounted(async () => {
-  let routerCategorySlug = $route.params.slug;
-  await shopProductCat.fetchByCatSlug(routerCategorySlug);
+const shopProductSearch = useShopSearchPrd();
+
+watchEffect(async () => {
+  let text = routerPrdSrhText.value;
+  if (text !== null && text.length > 1) {
+    await shopProductSearch.fetchBySearchText(shopProductSearch.getPrdSchText);
+  }
 })
 
-const currentCatProducts = computed(() => shopProductCat.getPrdByCat);
-const currentCat = computed(() => shopProductCat.getPrdBySingeCatInfo)
+onBeforeRouteLeave(async () => {
+  await shopProductSearch.setSearchText("");
+})
 
+onMounted(async () => {
+  let text = routerPrdSrhText.value;
+  if (text !== null && text.length > 1) {
+    console.log(text);
+    await shopProductSearch.fetchBySearchText(shopProductSearch.getPrdSchText);
+  }
+})
+
+const currentTextProducts = computed(() => shopProductSearch.getPrdByCat);
+const currentCat = {title: shopProductSearch.getPrdSchText};
 
 </script>
 
