@@ -24,7 +24,8 @@
 "> ... Adding new products</span>
             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-layout-cards"
                  viewBox="0 0 24 24"
-                 stroke-width="2" stroke="var(--text-second-color)" fill="none" stroke-linecap="round" stroke-linejoin="round"
+                 stroke-width="2" stroke="var(--text-second-color)" fill="none" stroke-linecap="round"
+                 stroke-linejoin="round"
                  height="10em" width="10em" style="color: var(--accent-comp-low-color);">
               <path d="M0 0h24v24H0z" stroke="none"/>
               <rect x="4" y="4" width="6" height="16" rx="2"/>

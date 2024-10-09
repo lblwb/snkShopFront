@@ -17,11 +17,11 @@ export default defineNuxtPlugin(async () => {
             if (!webApp.isPlatformUnknown) {
                 // Use CloudStorage
                 cartData = await getStorageItem('shop_cart');
-                console.log('loadCartFromCloudStorage', cartData);
+                // console.log('loadCartFromCloudStorage', cartData);
             } else {
                 // Use localStorage
                 cartData = localStorage.getItem('shop_cart');
-                console.log('loadCartFromLocalStorage', cartData);
+                // console.log('loadCartFromLocalStorage', cartData);
             }
 
             if (cartData) {

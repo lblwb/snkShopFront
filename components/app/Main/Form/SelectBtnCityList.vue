@@ -35,9 +35,15 @@
       </div>
 
     </button>
-    <ul v-if="isOpen" class="options" @mouseleave="hiddenSelect">
-      <li v-for="option in filteredOptions" :key="option.id" @click="selectOption(option)">
-        {{ option.name }}
+    <!--    -->
+    <ul v-if="isOpen" class="options" @mouseleave="hiddenSelect" style="max-height: 22vh; overflow-y:auto">
+      <li v-for="option in filteredOptions" :key="option[props.selectOptionIdField]" @click="selectOption(option)"
+          :class="{'selected': option == selectedCity }">
+
+        <slot name="Option" :option="option">
+          {{ option.name }}
+        </slot>
+
       </li>
     </ul>
   </div>
@@ -49,6 +55,10 @@ import {ref, computed, watch} from 'vue';
 const props = defineProps({
   selectDefTitle: {
     default: "Выберите город",
+    type: String
+  },
+  selectOptionIdField: {
+    default: "idx",
     type: String
   },
   selectedCity: {
@@ -70,13 +80,13 @@ let selectedOption = ref(props.selectedCity);
 
 // Вычисляемое свойство для фильтрации опций
 const filteredOptions = computed(() => {
-  return options.value.filter(option => option.id !== (selectedOption.value ? selectedOption.value.id : null));
+  return options.value.filter(option => option[props.selectOptionIdField] !== (selectedOption.value ? selectedOption.value[props.selectOptionIdField] : null));
 });
 
 // Следим за изменениями в props.cities и сбрасываем выбранный город при необходимости
 watch(() => props.cities, (newVal, oldVal) => {
   options.value = newVal;
-  if (selectedOption.value && !newVal.some(city => city.id === selectedOption.value.id)) {
+  if (selectedOption.value && !newVal.some(city => city[props.selectOptionIdField] === selectedOption.value[props.selectOptionIdField])) {
     selectedOption.value = null;
     emit('citySelected', null); // Отправляем null для сброса выбранного города в родительский компонент
   }
@@ -84,7 +94,9 @@ watch(() => props.cities, (newVal, oldVal) => {
 
 // Методы компонента
 const toggleSelect = () => {
-  isOpen.value = !isOpen.value;
+  if (props.cities.length > 0) {
+    isOpen.value = !isOpen.value;
+  }
 };
 
 const hiddenSelect = () => {
@@ -180,5 +192,10 @@ const selectOption = (option) => {
 .options li:focus {
   background-color: #f5f5f5;
   color: #222;
+}
+
+.selected {
+  background-color: #f5f5f5;
+  color: red;
 }
 </style>

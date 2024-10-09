@@ -37,7 +37,7 @@
       <label for="InputPromocode" style="margin-bottom: 8px; display: block;">Payment method</label>
       <div class="CartCheckoutSelectPayInput">
         <SelectBtnCityList style="background: #fff; border-radius: 8px; padding: 0;"
-                           selectDefTitle="Select Payment Method"
+                           selectDefTitle="Select Payment Method" selectOptionIdField="id"
                            :cities="InputSelPayment.list" v-model:citySelected="InputSelPayment.selected">
           <template #Icon>
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -52,56 +52,41 @@
              v-if="InputSelPayment.selected == undefined || InputSelPayment.selected == null">select method</label>
     </div>
 
-
-    <div class="CartCheckoutSelectPay" style="margin-bottom: 18px">
-      <label for="InputPromocode" style="margin-bottom: 8px; display: block;">Country</label>
-      <div class="CartCheckoutSelectPayInput">
-        <SelectBtnCityList style="background: #fff; border-radius: 8px; padding: 0;"
-                           selectDefTitle="Select Country"
-                           :cities="InputCountryDelSel.list" v-model:citySelected="InputCountryDelSel.selected">
-          <template #Icon>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path
-                  d="M12 19H6C5.20435 19 4.44129 18.6839 3.87868 18.1213C3.31607 17.5587 3 16.7956 3 16V8C3 7.20435 3.31607 6.44129 3.87868 5.87868C4.44129 5.31607 5.20435 5 6 5H18C18.7956 5 19.5587 5.31607 20.1213 5.87868C20.6839 6.44129 21 7.20435 21 8V12.5M3 10H21M16 19H22M22 19L19 16M22 19L19 22M7.005 15H7.01M11 15H13"
-                  stroke="#FF1919" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </template>
-        </SelectBtnCityList>
-      </div>
-      <label for="InputPromocode" style="margin-bottom: 8px; display: block; color: var(--accent-second-color);"
-             v-if="InputCountryDelSel.selected === undefined || InputCountryDelSel.selected === null">select
-        country</label>
-    </div>
-
+    <CheckoutCountry :InputCountryDelSel="InputCountryDelSel"/>
+    <!--    {{ InputCountryDelSel }}-->
 
     <div class="CartCheckoutAddress" style="margin-bottom: 18px"
-         v-if=" InputCountryDelSel.selected !== null && InputCountryDelSel.selected.id && InputCountryDelSel.selected.id == 'other'">
-      <label for="InputAddress" style="margin-bottom: 8px; display: block;">Delivery Address</label>
-      <input placeholder="Enter promo code"
+         v-if=" InputCountryDelSel.selected !== null && InputCountryDelSel.selected.id && InputCountryDelSel.selected.id == 'OTH'">
+      <label for="InputAddress" style="margin-bottom: 8px; display: block;">City</label>
+      <input placeholder="Enter City"
              style=" padding: 14px 14px;background: #fff;border-radius: 6px;width: 100%;border: solid 1px #EFEFF4;font-size: 14px;font-weight: 500;opacity: 0.6;"
              v-model="InputAddress.value">
     </div>
 
-
-    <div class="CartCheckoutPointMap" style="margin-bottom: 18px" v-else>
-      <label for="InputPromocode" style="margin-bottom: 8px; display: block;">Parsel Station</label>
-      <div class="CartCheckoutSelectPayInput">
-        <SelectBtnCityList style="background: #fff; border-radius: 8px; padding: 0;"
-                           selectDefTitle="Select Parsel station"
-                           :cities="InputPrcCntryDelSel.list" v-model:citySelected="InputPrcCntryDelSel.selected">
-          <template #Icon>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path
-                  d="M12 19H6C5.20435 19 4.44129 18.6839 3.87868 18.1213C3.31607 17.5587 3 16.7956 3 16V8C3 7.20435 3.31607 6.44129 3.87868 5.87868C4.44129 5.31607 5.20435 5 6 5H18C18.7956 5 19.5587 5.31607 20.1213 5.87868C20.6839 6.44129 21 7.20435 21 8V12.5M3 10H21M16 19H22M22 19L19 16M22 19L19 22M7.005 15H7.01M11 15H13"
-                  stroke="#FF1919" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </template>
-        </SelectBtnCityList>
-      </div>
-      <label for="InputPromocode" style="margin-bottom: 8px; display: block; color: var(--accent-second-color);"
-             v-if="InputCountryDelSel.selected == undefined || InputCountryDelSel.selected == null">select
-        station</label>
+    <div class="CartCheckoutAddress" style="margin-bottom: 18px"
+         v-if=" InputCountryDelSel.selected !== null && InputCountryDelSel.selected.id && InputCountryDelSel.selected.id == 'OTH'">
+      <label for="InputAddress" style="margin-bottom: 8px; display: block;">Delivery Address</label>
+      <input placeholder="Enter full address"
+             style=" padding: 14px 14px;background: #fff;border-radius: 6px;width: 100%;border: solid 1px #EFEFF4;font-size: 14px;font-weight: 500;opacity: 0.6;"
+             v-model="InputAddress.value">
     </div>
+
+    <div class="CartCheckoutAddress" style="margin-bottom: 18px"
+         v-if=" InputCountryDelSel.selected !== null && InputCountryDelSel.selected.id && InputCountryDelSel.selected.id == 'OTH'">
+      <label for="InputAddress" style="margin-bottom: 8px; display: block;">Postcode</label>
+      <input placeholder="Enter Postcode"
+             style=" padding: 14px 14px;background: #fff;border-radius: 6px;width: 100%;border: solid 1px #EFEFF4;font-size: 14px;font-weight: 500;opacity: 0.6;"
+             v-model="InputAddress.value">
+    </div>
+
+    <template v-else>
+      <CheckoutPoints :InputCountryDelSel="InputCountryDelSel" v-model:InputPrcCntryDelSel="InputPrcCntryDelSel"/>
+
+      <!--      {{ InputPrcCntryDelSel.selected }}-->
+    </template>
+
+
+    <CheckoutClientInfo/>
 
     <div class="CartCheckoutPromocode" style="margin-bottom: 18px">
       <label for="InputPromocode" style="margin-bottom: 8px; display: block;">Promo code</label>
@@ -140,6 +125,8 @@
 
     <!--    {{ InputSelPayment }}-->
 
+    <!--    {{ InputPrcCntryDelSel }}-->
+
     <!--  Checkout  -->
     <div class="CartCheckoutFooter">
       <div class="CartCheckoutFooterBtn" v-if="checkoutBtn.show" @click="checkoutCartData" v-haptic-engine
@@ -158,6 +145,9 @@ import {MainButton, useWebAppMainButton, useWebAppPopup, useWebApp} from "vue-tg
 import SelectBtnCityList from "~/components/app/Main/Form/SelectBtnCityList.vue";
 import BlockBTransfer from "~/components/app/Main/Orders/Block/BlockBTransfer.vue";
 import {useCartCheckoutStore} from "~/stores/shop/cart/checkout/index";
+import CheckoutCountry from "~/components/app/Main/Checkout/CheckoutCountry.vue";
+import CheckoutPoints from "~/components/app/Main/Checkout/CheckoutPoints.vue";
+import CheckoutClientInfo from "~/components/app/Main/Checkout/CheckoutClientInfo.vue";
 
 definePageMeta({
   layout: 'twa-default'
@@ -181,10 +171,7 @@ const cartCheckoutStore = useCartCheckoutStore();
 
 const checkoutBtn = reactive({
   show: computed(() => {
-    return InputConfirmTerm.checked
-        && InputAddress.value !== null
-        && InputSelPayment.selected !== undefined
-        && InputSelPayment.selected !== null
+    return isCheckoutAllowed()
   }),
   text: computed(() => {
     return InputConfirmTerm.checked
@@ -201,29 +188,19 @@ const textOrderBtn = computed(() => {
 
 const InputCountryDelSel = reactive({
   list: [
-    {id: 'latvia', name: 'Latvia', points: true},
-    {id: 'lithuania', name: 'Lithuania', points: true},
-    {id: 'eesti', name: 'Estonia', points: true},
+    {id: 'LV', name: 'Latvia', points: true},
+    {id: 'LT', name: 'Lithuania', points: true},
+    {id: 'EE', name: 'Estonia', points: true},
     //
-    {id: 'other', name: 'Other'},
-    // {id: 'wallet_app', name: '@Wallet (mini app)'},
-    // {id: 'ton_wallet', name: 'Ton Wallet'}
+    {id: 'OTH', name: 'Other'},
   ],
   selected: null,
   // transferInfo: null
 });
 
-const InputPrcCntryDelSel = reactive({
-  list: [
-    {id: 'other1', name: 'Point 1 — Latvia, str. Test, 52-e'},
-    {id: 'other2', name: 'Point 2 — Lithuania, str. Ga, 12-e'},
-    {id: 'other3', name: 'Point 3 — Lithuania, str. Twq, 11'},
-    {id: 'other4', name: 'Point 4 — Estonia, str. Setc, 2-e'},
-    // {id: 'wallet_app', name: '@Wallet (mini app)'},
-    // {id: 'ton_wallet', name: 'Ton Wallet'}
-  ],
+const InputPrcCntryDelSel = ref({
+  list: [],
   selected: null,
-  // transferInfo: null
 });
 
 const InputSelPayment = reactive({
@@ -276,6 +253,15 @@ const checkoutCartData = async () => {
     }
   }
 
+  let address = null;
+  let ad_pnt = false
+  if (InputPrcCntryDelSel.selected !== undefined) {
+    ad_pnt = true;
+    address = InputPrcCntryDelSel.selected.zip_code
+  } else {
+    address = InputAddress.value
+  }
+
   const paymentMethod = toRaw(InputSelPayment.transferInfo);
   //
   const {success, payment_link} = await cartCheckoutStore.fetchOrderCheckout({
@@ -285,7 +271,8 @@ const checkoutCartData = async () => {
       items: cartItems.value,
       total_price: cartPrice.value,
       // pm: paymentMethod.idx,
-      address: InputAddress.value,
+      address: address,
+      ad_pnt: ad_pnt,
     }
   });
 
@@ -336,6 +323,26 @@ const checkoutCartData = async () => {
   // }
 }
 
+
+function isCheckoutAllowed() {
+  // Проверка всех условий для отображения кнопки checkout
+  if (!InputConfirmTerm.checked) {
+    return false;
+  }
+
+  if (!InputSelPayment.selected) {
+    return false;
+  }
+
+  if (InputCountryDelSel.selected !== null && InputCountryDelSel.selected.id && InputCountryDelSel.selected.id == 'OTH') {
+    return InputAddress.value !== undefined && InputAddress.value === null || InputAddress.value.length > 3;
+  } else {
+    const InputPrcCntryDelSelRaw = toRaw(InputPrcCntryDelSel).value;
+    return (InputPrcCntryDelSelRaw.selected !== undefined && InputPrcCntryDelSelRaw.selected !== null && InputPrcCntryDelSelRaw.selected.zip_code !== undefined && InputPrcCntryDelSelRaw.selected.zip_code !== null);
+  }
+
+  return false;
+}
 
 watchEffect(() => {
   if (cartQtyItem.value === 0) {
@@ -502,6 +509,8 @@ const checkoutCart = () => {
 .CartCheckoutFooterBtn:focus {
   background: var(--accent-comp-high-color);
 }
+
+/**/
 
 
 </style>

@@ -104,9 +104,9 @@
 
           <MiniApp/>
           <!--   -->
-          <Transition name="fade">
+          <!--          <Transition name="fade">-->
             <NuxtPage/>
-          </Transition>
+          <!--          </Transition>-->
         </ClientOnly>
         <!--        </slot>-->
       </div>
