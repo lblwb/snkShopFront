@@ -62,21 +62,21 @@
         <label for="InputAddress" style="margin-bottom: 8px; display: block;">City</label>
         <input placeholder="Enter City"
                style=" padding: 14px 14px;background: #fff;border-radius: 6px;width: 100%;border: solid 1px #EFEFF4;font-size: 14px;font-weight: 500;opacity: 0.6;"
-               v-model="InputCity">
+               v-model="InputCity.value">
       </div>
 
       <div class="CartCheckoutAddress" style="margin-bottom: 18px">
         <label for="InputAddress" style="margin-bottom: 8px; display: block;">Delivery Address</label>
         <input placeholder="Enter full address"
                style=" padding: 14px 14px;background: #fff;border-radius: 6px;width: 100%;border: solid 1px #EFEFF4;font-size: 14px;font-weight: 500;opacity: 0.6;"
-               v-model="InputAddress">
+               v-model="InputAddress.value">
       </div>
 
       <div class="CartCheckoutAddress" style="margin-bottom: 18px">
         <label for="InputAddress" style="margin-bottom: 8px; display: block;">Postcode</label>
         <input placeholder="Enter Postcode"
                style=" padding: 14px 14px;background: #fff;border-radius: 6px;width: 100%;border: solid 1px #EFEFF4;font-size: 14px;font-weight: 500;opacity: 0.6;"
-               v-model="InputPostcode">
+               v-model="InputPostcode.value">
       </div>
 
     </template>
@@ -138,11 +138,11 @@
 
   </div>
 </template>
+
 <script setup>
-import {ref, reactive, computed, toRaw, watchEffect, onMounted} from 'vue';
-import {useRouter} from 'vue-router';
 import {useCartStore} from '~/stores/shop/cart/index';
-import {useWebAppMainButton, useWebAppPopup, useWebApp} from "vue-tg";
+import {MainButton, useWebAppMainButton, useWebAppPopup, useWebApp} from "vue-tg";
+//import {getImageUrl} from "~/utils/assets/img";
 import SelectBtnCityList from "~/components/app/Main/Form/SelectBtnCityList.vue";
 import BlockBTransfer from "~/components/app/Main/Orders/Block/BlockBTransfer.vue";
 import {useCartCheckoutStore} from "~/stores/shop/cart/checkout/index";
@@ -152,41 +152,49 @@ import CheckoutClientInfo from "~/components/app/Main/Checkout/CheckoutClientInf
 
 definePageMeta({
   layout: 'twa-default'
-});
+})
+
 
 const appWeb = useWebApp();
 const appMainButton = useWebAppMainButton();
 const appPopup = useWebAppPopup();
 
-const router = useRouter();
+
+const $router = useRouter();
+
 
 const cartStore = useCartStore();
-const cartItems = computed(() => cartStore.getItems);
-const cartQtyItem = computed(() => cartStore.getTotalItems);
-const cartPrice = computed(() => cartStore.getTotalPrice);
-
+const cartItems = computed(() => cartStore.getItems)
+const cartQtyItem = computed(() => cartStore.getTotalItems)
+const cartPrice = computed(() => cartStore.getTotalPrice)
+//
 const cartCheckoutStore = useCartCheckoutStore();
 
 const checkoutBtn = reactive({
-  show: computed(isCheckoutAllowed),
+  show: computed(() => {
+    return isCheckoutAllowed()
+  }),
   text: computed(() => {
     return InputConfirmTerm.checked
     && InputSelPayment.selected !== undefined
     && InputSelPayment.selected !== null
-    && InputSelPayment.selected.id === 'crypto'
-        ? "Pay Order — Crypto"
-        : "Checkout Order";
+    && InputSelPayment.selected.id === 'crypto' ? "Pay Order — Crypto" : "Checkout Order"
   }),
-});
+})
+
+// const textOrderBtn = computed(() => {})
+
 
 const InputCountryDelSel = reactive({
   list: [
     {id: 'LV', name: 'Latvia', points: true},
     {id: 'LT', name: 'Lithuania', points: true},
     {id: 'EE', name: 'Estonia', points: true},
+    //
     {id: 'OTH', name: 'Other'},
   ],
   selected: null,
+  // transferInfo: null
 });
 
 const InputPrcCntryDelSel = ref({
@@ -200,112 +208,102 @@ const InputSelPayment = reactive({
     {id: 'transfer', name: 'Bank Transfer'},
     {id: 'crypto', name: 'Pay Crypto'},
     {id: 'csh_del', name: 'Cash on Delivery'},
-    // { id: 'wallet_app', name: '@Wallet (mini app)' },
-    // { id: 'ton_wallet', name: 'Ton Wallet' }
+    // {id: 'wallet_app', name: '@Wallet (mini app)'},
+    // {id: 'ton_wallet', name: 'Ton Wallet'}
   ],
   selected: {id: null, name: 'Not Selected'},
   transferInfo: null
 });
 
-
-// const
-
-const isOtherAddress = ref({status: false})
-const InputAddress = ref('');
-const InputCity = ref('');
-const InputPostcode = ref('');
+const InputAddress = ref({value: null});
+const InputCity = ref({value: null});
+const InputPostcode = ref({value: null});
 //
-const InputClFullname = reactive({value: ''});
-const InputClPhone = reactive({value: ''});
-const InputClEmail = reactive({value: ''});
+const InputClFullname = reactive({value: null});
+const InputClPhone = reactive({value: null});
+const InputClEmail = reactive({value: null});
+
 
 const InputConfirmTerm = reactive({
   checked: false
-});
+})
 
-appMainButton.onMainButtonClicked(() => checkoutCartData());
+appMainButton.onMainButtonClicked(() => checkoutCart())
+
+const setShowTgBtnCheckout = (status) => {
+  // if (status) {
+  //   appMainButton.setMainButtonParams({
+  //     text: "Checkout",
+  //     color: "#C42323",
+  //     is_active: true
+  //   });
+  //   appMainButton.showMainButton();
+  // } else {
+  //   appMainButton.hideMainButton();
+  // }
+}
 
 const checkoutCartData = async () => {
-  // console.log(InputSelPayment.selected);
 
-  const msg_warn = "Please fill in all required fields!";
-  if (!isCheckoutAllowed) {
+  console.log(InputSelPayment.selected);
+  //
+
+  const deliveryAddress = toRaw(InputAddress.value);
+  if (deliveryAddress == null || deliveryAddress.length < 3) {
+    const msg_warn = "Please enter delivery address!";
+    //
     if (!appWeb.isPlatformUnknown) {
       await appPopup.showAlert(msg_warn);
+      return;
     } else {
-      alert(msg_warn);
+      await alert(msg_warn);
+      return;
     }
-    return;
   }
 
-  // const deliveryAddress = InputAddress.value.trim();
-  // if (!deliveryAddress || deliveryAddress.length < 3) {
-  //   const msg_warn = "Please enter delivery address!";
-  //   if (!appWeb.isPlatformUnknown) {
-  //     await appPopup.showAlert(msg_warn);
-  //   } else {
-  //     alert(msg_warn);
-  //   }
-  //   return;
-  // }
-
-  const isOtherAddressStatus = isOtherAddress.value.status;
-
-  let del_address = '';
-  if (!isOtherAddressStatus) {
-    del_address = `${InputCountryDelSel.selected.name} — point: ${InputPrcCntryDelSel.value.selected.zip_code}`;
+  let address = null;
+  let ad_pnt = false
+  if (InputPrcCntryDelSel.selected !== undefined) {
+    ad_pnt = true;
+    address = InputPrcCntryDelSel.selected.zip_code
   } else {
-    del_address = `${InputCountryDelSel.selected.name}  ${InputCity.value} ${InputAddress.value} ${InputPostcode.value}`;
+    address = InputAddress.value
   }
 
-  const paymentMethod = InputSelPayment.transferInfo ? toRaw(InputSelPayment.transferInfo) : null;
-
-
-  if(cartPrice.value < 1){
-     alert(msg_warn);
-     return;
-  }
-
-
-  let payload_data = {
-    ptype: InputSelPayment.selected.id,
-    //
-    items: cartItems.value,
-    total_price: cartPrice.value,
-    address: del_address,
-    // If Point to send zip
-    ad_pnt: !isOtherAddressStatus,
-
-    // Client Data
-    cl_name: InputClFullname.value,
-    cl_phone: InputClPhone.value,
-    cl_email: InputClEmail.value,
-  }
-
-  if (InputPrcCntryDelSel.value.selected !== null) {
-    payload_data['pnt_zip'] = InputPrcCntryDelSel.value.selected.zip_code;
-  }
-
+  const paymentMethod = toRaw(InputSelPayment.transferInfo);
+  //
   const {success, payment_link} = await cartCheckoutStore.fetchOrderCheckout({
-    data: payload_data
+    data: {
+      ptype: InputSelPayment.selected.id,
+      //
+      items: cartItems.value,
+      total_price: cartPrice.value,
+      // pm: paymentMethod.idx,
+      address: address,
+      ad_pnt: ad_pnt,
+    }
   });
 
   console.log(paymentMethod, "payment_link", payment_link);
+
+  // console.log("result", result);
 
   const success_msg = "Order created. Waiting confirmation for payment.";
   const redirect_payment_page_msg = "Order created. Redirect to payment page.";
   const not_created_msg = "Order not created. Retry later.";
 
+  //
   if (success) {
+
     if (InputSelPayment.selected.id === "crypto") {
       window.open(payment_link, '_blank').focus();
 
       if (!appWeb.isPlatformUnknown) {
-        await appPopup.showAlert(redirect_payment_page_msg);
+        await appPopup.showAlert(redirect_payment_page_msg)
       } else {
-        alert(redirect_payment_page_msg);
+        alert(redirect_payment_page_msg)
       }
-
+      //
       clearCart();
       return;
     }
@@ -314,14 +312,15 @@ const checkoutCartData = async () => {
     clearCart();
 
     if (!appWeb.isPlatformUnknown) {
-      await appPopup.showAlert(success_msg);
+      await appPopup.showAlert(success_msg)
     } else {
       alert(success_msg);
     }
 
-    await router.push({name: 'index'});
+    //
+    await $router.push({name: 'index'});
 
-    // await router.push({ name: 'checkout-order', params: { id: order.id } })
+    // await $router.push({name: 'checkout-order', params: {id: order.id}})
   } else {
     if (!appWeb.isPlatformUnknown) {
       await appPopup.showAlert(not_created_msg);
@@ -329,57 +328,78 @@ const checkoutCartData = async () => {
       alert(not_created_msg);
     }
   }
+  // }
 }
 
-// Check Valid Fields
+
 function isCheckoutAllowed() {
   // Проверка выбранного способа оплаты
-  if (!InputSelPayment.selected || !InputSelPayment.selected.id) {
+  if (InputSelPayment.selected.id === undefined || InputSelPayment.selected.id === null) {
     return false;
   }
 
-
-  const isOtherAddressStatus = isOtherAddress.value.status
-
-  console.log('isOtherAddressRaw: ', isOtherAddress.value.status);
-
-  if (isOtherAddressStatus) {
+  // Проверка адреса доставки
+  if (
+    InputCountryDelSel.selected !== null &&
+    InputCountryDelSel.selected.id === 'OTH'
+  ) {
     // Другой адрес
-    if (!InputCity.value || InputCity.value.length <= 2) {
-      console.log('InputCity: ', InputCity.value);
-      return false;
-    }
-    if (!InputPostcode.value || InputPostcode.value.length <= 2) {
-      console.log('InputPostcode: ', InputPostcode.value);
-      return false;
-    }
-    if (!InputAddress.value || InputAddress.value.length <= 3) {
-      console.log('InputAddress: ', InputAddress.value);
-      return false;
-    }
-  } else if (isOtherAddressStatus === false) {
     if (
-        !InputPrcCntryDelSel.value.selected ||
-        !InputPrcCntryDelSel.value.selected.zip_code
+      InputCity.value === undefined ||
+      InputCity.value === null ||
+      InputCity.value.length <= 2
+    ) {
+      return false;
+    }
+    if (
+      InputPostcode.value === undefined ||
+      InputPostcode.value === null ||
+      InputPostcode.value.length <= 2
+    ) {
+      return false;
+    }
+    if (
+      InputAddress.value === undefined ||
+      InputAddress.value === null ||
+      InputAddress.value.length <= 3
+    ) {
+      return false;
+    }
+  } else {
+    const InputPrcCntryDelSelRaw = toRaw(InputPrcCntryDelSel).value;
+    if (
+      InputPrcCntryDelSelRaw.selected === undefined ||
+      InputPrcCntryDelSelRaw.selected === null ||
+      InputPrcCntryDelSelRaw.selected.zip_code === undefined ||
+      InputPrcCntryDelSelRaw.selected.zip_code === null
     ) {
       return false;
     }
   }
 
   // Обязательные поля (Имя, Телефон, Email)
-  if (!InputClFullname.value || InputClFullname.value.trim().length < 3) {
-    return false;
-  }
-
   if (
-      !InputClPhone.value ||
-      isNaN(InputClPhone.value) ||
-      InputClPhone.value.trim().length < 6
+    InputClFullname.value === undefined ||
+    InputClFullname.value === null ||
+    InputClFullname.value.length < 3
   ) {
     return false;
   }
 
-  if (!InputClEmail.value || InputClEmail.value.trim().length < 4) {
+  if (
+    InputClPhone.value === undefined ||
+    InputClPhone.value === null ||
+    isNaN(InputClPhone.value) ||
+    InputClPhone.value.length < 6
+  ) {
+    return false;
+  }
+
+  if (
+    InputClEmail.value === undefined ||
+    InputClEmail.value === null ||
+    InputClEmail.value.length < 4
+  ) {
     return false;
   }
 
@@ -388,60 +408,50 @@ function isCheckoutAllowed() {
     return false;
   }
 
+  // Если все проверки пройдены, вернуть true
   return true;
 }
 
 watchEffect(() => {
   if (cartQtyItem.value === 0) {
-    router.push({name: 'index'});
-    appPopup.showAlert("Cart is empty.");
+    $router.push({name: 'index'});
+    appPopup.showAlert("Cart is empty.")
   } else {
-    // Здесь можно управлять видимостью кнопки через checkoutBtn.show
-    // Например, можно обновить состояние кнопки или выполнить другие действия
-  }
-
-  if (InputCountryDelSel.selected && InputCountryDelSel.selected) {
-    InputPrcCntryDelSel.value.selected = null;
-  }
-
-  if (InputCountryDelSel.selected && InputCountryDelSel.selected.id === 'OTH') {
-    isOtherAddress.value.status = true;
-    InputPrcCntryDelSel.value.selected = null;
-  } else {
-    isOtherAddress.value.status = false;
-    // Reset Address inputs
-    InputPostcode.value = '';
-    InputAddress.value = '';
-    InputCity.value = '';
+    setShowTgBtnCheckout(true)
   }
 });
 
 onMounted(() => {
   if (cartQtyItem.value === 0) {
-    router.push({name: 'index'});
-    appPopup.showAlert("Cart is empty.");
+    $router.push({name: 'index'});
+    appPopup.showAlert("Cart is empty.")
   } else {
-    // Дополнительная логика при монтировании компонента, если необходимо
+    // setShowTgBtnCheckout(true)
   }
-});
+})
 
 onBeforeRouteLeave(() => {
-  // Логика перед уходом с маршрута, если необходимо
-});
+  // setShowTgBtnCheckout(false)
+})
 
 const clearCart = () => {
   cartStore.clearCart();
-  router.push({name: 'index'});
+  // setShowTgBtnCheckout(false);
+  //
+  $router.push({name: 'index'});
+}
+const removeProductCart = (product) => {
+  cartStore.removeItem(product.idx)
 }
 
-const removeProductCart = (product) => {
-  cartStore.removeItem(product.idx);
-}
 
 const checkoutCart = () => {
-  // Возможно, вы хотели вызвать checkoutCartData здесь
-  checkoutCartData();
+  setTimeout(() => {
+    appPopup.showAlert("Success completed");
+  }, 1000);
+  clearCart();
 }
+
 </script>
 
 <style scoped>

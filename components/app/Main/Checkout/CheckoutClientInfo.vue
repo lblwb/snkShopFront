@@ -2,7 +2,7 @@
   <div class="CartCheckoutClientInfo">
     <div class="checkoutClientInfoBlock">
       <div class="CartCheckoutClientInfoInput" style="margin-bottom: 18px">
-        <label for="InputPromocode" style="margin-bottom: 8px; display: block;">Name</label>
+        <label for="InputClFullName" style="margin-bottom: 8px; display: block;">Name</label>
         <input placeholder="Enter first and last name" style="
     padding: 14px 14px;
     background: #fff;
@@ -12,10 +12,10 @@
     font-size: 14px;
     font-weight: 500;
     opacity: 0.6;
-" required>
+" v-model="InputClFullname.value" required>
       </div>
       <div class="CartCheckoutClientInfoInput" style="margin-bottom: 18px">
-        <label for="InputPromocode" style="margin-bottom: 8px; display: block;">Phone number</label>
+        <label for="InputClPhone" style="margin-bottom: 8px; display: block;">Phone number</label>
         <input type="phone" placeholder="Enter phone number" style="
     padding: 14px 14px;
     background: #fff;
@@ -25,10 +25,10 @@
     font-size: 14px;
     font-weight: 500;
     opacity: 0.6;
-" required>
+" v-model="InputClPhone.value" required>
       </div>
       <div class="CartCheckoutClientInfoInput" style="margin-bottom: 18px">
-        <label for="InputPromocode" style="margin-bottom: 8px; display: block;">E-mail</label>
+        <label for="InputClName" style="margin-bottom: 8px; display: block;">E-mail</label>
         <input type="email" placeholder="E-mail" style="
     padding: 14px 14px;
     background: #fff;
@@ -38,7 +38,7 @@
     font-size: 14px;
     font-weight: 500;
     opacity: 0.6;
-" required>
+" v-model="InputClEmail.value" required>
       </div>
     </div>
   </div>
@@ -49,6 +49,33 @@
 defineComponent({
   name: 'CheckoutClientInfo',
 });
+
+const InputClFullname = defineModel("InputClFullname", {
+  // required: true,
+  default: () => {
+    return {
+      value: ""
+    }
+  }
+})
+
+const InputClPhone = defineModel("InputClPhone", {
+  // required: true,
+  default: () => {
+    return {
+      value: ""
+    }
+  }
+})
+
+const InputClEmail = defineModel("InputClEmail", {
+  // required: true,
+  default: () => {
+    return {
+      value: ""
+    }
+  }
+})
 
 </script>
 
