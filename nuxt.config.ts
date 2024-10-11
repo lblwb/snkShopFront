@@ -1,6 +1,12 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 
 // @ts-ignore
+// import Components from 'unplugin-vue-components/vite'
+// @ts-ignore
+// import { UnpluginVueComponentsResolver, UnpluginDirectivesResolver, UnpluginModulesResolver } from 'maz-ui/resolvers'
+
+
+// @ts-ignore
 export default defineNuxtConfig({
     devtools: {enabled: true},
     devServer: {},
@@ -47,8 +53,12 @@ export default defineNuxtConfig({
 
     //
     modules: [
-       // ['@nuxtjs/dotenv', { systemvars: true }],
-        "@pinia/nuxt", '@nuxt/image', '@nuxtjs/device'],
+        // ['@nuxtjs/dotenv', { systemvars: true }],
+        "@pinia/nuxt",
+        '@nuxt/image',
+        '@nuxtjs/device',
+        'maz-ui/nuxt'
+    ],
 
     buildModules: [
         '@nuxtjs/dotenv'

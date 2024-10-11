@@ -16,9 +16,10 @@
     "animate.css": "^4.1.1",
     "axios": "^1.7.5",
     "dotenv": "^16.4.5",
+    "maz-ui": "latest",
     "nuxt": "^3.13.0",
     "pinia": "^2.2.2",
-    "vue": "latest",
+    "vue": "^3.5.11",
     "vue-tg": "^0.8.0"
   },
   "devDependencies": {

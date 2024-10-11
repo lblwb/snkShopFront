@@ -139,7 +139,7 @@
   </div>
 </template>
 <script setup>
-import {ref, reactive, computed, toRaw, watchEffect, onMounted} from 'vue';
+// import {ref, reactive, computed, toRaw, watchEffect, onMounted} from 'vue';
 import {useRouter} from 'vue-router';
 import {useCartStore} from '~/stores/shop/cart/index';
 import {useWebAppMainButton, useWebAppPopup, useWebApp} from "vue-tg";
@@ -149,10 +149,13 @@ import {useCartCheckoutStore} from "~/stores/shop/cart/checkout/index";
 import CheckoutCountry from "~/components/app/Main/Checkout/CheckoutCountry.vue";
 import CheckoutPoints from "~/components/app/Main/Checkout/CheckoutPoints.vue";
 import CheckoutClientInfo from "~/components/app/Main/Checkout/CheckoutClientInfo.vue";
+import {useToast} from 'maz-ui';
 
 definePageMeta({
   layout: 'twa-default'
 });
+
+const {$toast} = useNuxtApp();
 
 const appWeb = useWebApp();
 const appMainButton = useWebAppMainButton();
@@ -230,11 +233,16 @@ const checkoutCartData = async () => {
 
   const msg_warn = "Please fill in all required fields!";
   if (!isCheckoutAllowed) {
-    if (!appWeb.isPlatformUnknown) {
-      await appPopup.showAlert(msg_warn);
-    } else {
-      alert(msg_warn);
-    }
+    // if (!appWeb.isPlatformUnknown) {
+    //   await appPopup.showAlert(msg_warn);
+    // } else {
+    //   alert(msg_warn);
+    // }
+
+    $toast.warning(msg_warn, {
+      timeout: 2000,
+      position: 'top-center',
+    });
     return;
   }
 
@@ -261,9 +269,13 @@ const checkoutCartData = async () => {
   const paymentMethod = InputSelPayment.transferInfo ? toRaw(InputSelPayment.transferInfo) : null;
 
 
-  if(cartPrice.value < 1){
-     alert(msg_warn);
-     return;
+  if (cartPrice.value < 1) {
+    // alert(msg_warn);
+    $toast.warning(msg_warn, {
+      timeout: 2000,
+      position: 'top-center',
+    });
+    return;
   }
 
 
@@ -300,34 +312,58 @@ const checkoutCartData = async () => {
     if (InputSelPayment.selected.id === "crypto") {
       window.open(payment_link, '_blank').focus();
 
-      if (!appWeb.isPlatformUnknown) {
-        await appPopup.showAlert(redirect_payment_page_msg);
-      } else {
-        alert(redirect_payment_page_msg);
-      }
+      // if (!appWeb.isPlatformUnknown) {
+      //   await appPopup.showAlert(redirect_payment_page_msg);
+      // } else {
+      //   alert(redirect_payment_page_msg);
+      // }
+
+
+      $toast.success(redirect_payment_page_msg, {
+        timeout: 5000,
+        position: 'top-center',
+      });
 
       clearCart();
+
       return;
     }
 
-    // Clear cart
+
+    $toast.success(success_msg, {
+      timeout: 5000,
+      position: 'top-center',
+    });
+
     clearCart();
 
-    if (!appWeb.isPlatformUnknown) {
-      await appPopup.showAlert(success_msg);
-    } else {
-      alert(success_msg);
-    }
+    return;
 
-    await router.push({name: 'index'});
+    // if (!appWeb.isPlatformUnknown) {
+    //   await appPopup.showAlert(success_msg);
+    // } else {
+    //   alert(success_msg);
+    // }
+
+    // await router.push({name: 'index'});
 
     // await router.push({ name: 'checkout-order', params: { id: order.id } })
   } else {
-    if (!appWeb.isPlatformUnknown) {
-      await appPopup.showAlert(not_created_msg);
-    } else {
-      alert(not_created_msg);
-    }
+
+
+    $toast.error(not_created_msg, {
+      timeout: 5000,
+      position: 'top-center',
+    });
+
+    // clearCart();
+
+    // if (!appWeb.isPlatformUnknown) {
+    //   await appPopup.showAlert(not_created_msg);
+    // } else {
+    //   alert(not_created_msg);
+    // }
+
   }
 }
 
@@ -393,8 +429,14 @@ function isCheckoutAllowed() {
 
 watchEffect(() => {
   if (cartQtyItem.value === 0) {
+
+    toastNotif.warning("Cart is empty.", {
+      timeout: 2000
+    });
+
     router.push({name: 'index'});
-    appPopup.showAlert("Cart is empty.");
+
+    // appPopup.showAlert("Cart is empty.");
   } else {
     // Здесь можно управлять видимостью кнопки через checkoutBtn.show
     // Например, можно обновить состояние кнопки или выполнить другие действия
