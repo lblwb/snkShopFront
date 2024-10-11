@@ -8,14 +8,18 @@ export default defineNuxtPlugin(nuxtApp => {
     console.log(baseUrl);
     // @ts-ignore
     const api = axios.create({
-        baseURL:baseUrl, // Установите базовый URL вашего API
+        baseURL: baseUrl, // Установите базовый URL вашего API
     });
 
     // Добавьте интерцепторы для автоматической аутентификации
     api.interceptors.request.use((config: { headers: { Authorization: string; }; }) => {
         const token = useCookie('authToken'); // Пример получения токена из куки
-        if (token) {
-            config.headers.Authorization = `Bearer ${token}`;
+        // const token_ref = toRef(token)
+        // @ts-ignore
+        const token_ref = token.value ? token.value : '';
+        if (token_ref !== undefined && token_ref !== '') {
+            console.log("token:", token_ref);
+            config.headers.Authorization = `Bearer ${token_ref}`;
         }
         return config;
     });

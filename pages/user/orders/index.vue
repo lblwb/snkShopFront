@@ -23,14 +23,15 @@
     <div class="CartCheckoutBody">
       <div class="CartCheckoutList"
            style="display: flex;flex-flow: column;gap: 24px;max-height: 32vh;overflow: hidden auto;height: 100%;min-height: 50vh;overflow-x: hidden;overflow-x: scroll;">
-        <div class="CartCheckoutListItem" v-for="cartItem in cartOrdersItems" style="">
+        <div class="CartCheckoutListItem" v-for="cartItem in cartOrdersItems" style=""
+             @click="$router.push({name: 'user-orders-detail-slug', params: {slug: cartItem.idx}})">
           <!--          {{cartItem}}-->
           <div class="CartCheckoutListItemHeader"
                style="display: flex; justify-content: space-between; align-items: center;">
             <div class="listItemHeaderWrapper" style="display: flex; align-items: center; gap: 16px;">
               <div class="listItemHeaderInfo">
                 <div class="listItemHeaderTitle" style="font-size: 14px;">
-                  {{ cartItem.delivery_address }}
+                  {{ cartItem.onc }}
                 </div>
               </div>
 
