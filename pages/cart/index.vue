@@ -265,7 +265,7 @@ const checkoutCart = () => {
   max-height: 86vh;
   overflow: hidden auto;
   height: 100%;
-  min-height: 50vh;
+    min-height: 38vh;
 }
 
 @media screen and (max-width: 380px) {

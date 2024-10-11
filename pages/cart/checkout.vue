@@ -113,6 +113,19 @@
         conditions</label>
     </div>
 
+
+    <div class="CartCheckoutConfirm"
+         style="margin-bottom: 24px"
+         v-if="InputSelPayment.selected !== null && InputSelPayment.selected.id && InputSelPayment.selected.id == 'transfer'"
+    >
+      <input name="InputConfirm" type="checkbox" v-model="InptBankTransConfirmTerm.checked">
+      <label for="InputConfirm" style="max-width: 36vh">I have read and accept the terms bank transfer and conditions</label>
+
+      <label for="InputConfirm" style="margin-bottom: 8px; display: block; color: var(--accent-second-color);"
+             v-if="InptBankTransConfirmTerm.checked == undefined || InptBankTransConfirmTerm.checked == null">*** accept
+        terms Bank transfer</label>
+    </div>
+
     <!--    <div class="transferBlockWrapper"-->
     <!--         v-if="InputConfirmTerm.checked-->
     <!--         && InputSelPayment.selected !== undefined-->
@@ -223,6 +236,10 @@ const InputClPhone = reactive({value: ''});
 const InputClEmail = reactive({value: ''});
 
 const InputConfirmTerm = reactive({
+  checked: false
+});
+
+const InptBankTransConfirmTerm = reactive({
   checked: false
 });
 
