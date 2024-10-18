@@ -38,6 +38,37 @@
         Total amount: <span class="CartCheckoutBodyAmountCount">{{ data.orderData.total_amount }} €</span>
       </div>
 
+      <div class="productListInfo" style="margin-bottom: 36px; border-bottom: 1px solid var(--brd-second-color);">
+        <div class="productListInfoWrapper">
+          <div class="listItemFooterInfoProductsItem" v-if="data.orderData.items" v-for="item in data.orderData.items">
+            <div class="productItemImg"
+                 style="border-radius: 20px; overflow: hidden; position: relative; width: 48px; height: 48px; border: solid 2px var(--brd-second-color); display: flex; align-items: center; justify-content: center; z-index: 2;">
+              <img :src="getImageUrl(item.image_src)" style="width: 100%;">
+              <div class="productItemQty" style="position: absolute; right: -1px; top: -1px;">
+                <div class="productItemQtyBlock"
+                     style="background: #fff; padding: 2px 6px; font-size: 11px; z-index: 4; border-radius: 16px; border: solid 1px var(--accent-block-color)">
+                  {{ item.quantity }}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="listItemFooterInfoProductsList">
+            <div class="listItemFooterInfoProductsItem" v-if="data.orderData.items"
+                 v-for="(item, key) in data.orderData.items" @click="$router.push({name: 'catalog-product-slug', params: {slug: item.product.idx}})">
+              <div class="productsItemWrapper"
+                   style="display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 16px 0;">
+                <div class="productsItemTitle" style="max-width: 160px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 14px; font-weight: 700; color: var(--text-accent-color);">
+                  # {{ key + 1 }}. {{ item.product.name }}
+                </div>
+                <div class="productsItemPrice">
+                  (Q: {{ item.quantity }}) {{ item.product.price }} {{ item.product.currency }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
 
       <div class="CartCheckoutBodyPay" style="margin-bottom: 20px"
            v-if="data.orderData.status === 'payment_processing'">
@@ -81,9 +112,12 @@
         </button>
       </div>
 
-      <div class="CartCheckoutBodyPay" style="margin-bottom: 20px" v-if="data.orderData.status === 'payment_b_pnd_receipt'">
-        <BlockBTransfer :chckAmount="data.orderData.total_amount" />
+      <div class="CartCheckoutBodyPay" style="margin-bottom: 20px" v-if="data.orderData.pay_acc">
+        <!--           v-if="data.orderData.status === 'payment_b_pnd_receipt'">-->
+        <BlockBTransferOrder :recInfo="data.orderData.pay_acc" :orderData="data.orderData"/>
       </div>
+
+      <!--      {{data.orderData.pay_acc}}-->
 
       <!--      payment_processing-->
 
@@ -98,7 +132,7 @@
 import {MainButton, useWebAppMainButton, useWebAppPopup, useWebApp} from "vue-tg";
 import {useUserOrdersStore} from "~/stores/user/orders/userOrders";
 import {getImageUrl} from "~/utils/assets/img";
-import BlockBTransfer from "~/components/app/Main/Orders/Block/BlockBTransfer.vue";
+import BlockBTransferOrder from "~/components/app/Main/Orders/Block/BlockBTransferOrder.vue";
 
 definePageMeta({
   layout: 'twa-default'
@@ -129,6 +163,9 @@ const getStatusOrder = (order) => {
   if (order.status === 'pending') {
     return 'Pending'
   }
+  if (order.status === 'cancelled') {
+    return 'Cancelled! Retry later.'
+  }
   if (order.status === 'payment_b_pnd_receipt') {
     return 'Wait / A bank account to be transferred!'
   }
@@ -143,11 +180,50 @@ const getStatusOrder = (order) => {
   }
 }
 
+const formatDate = (orderCreatedAt) => {
+  const now = new Date();
+  const date = new Date(orderCreatedAt);
+  const diffInSeconds = Math.floor((now - date) / 1000);
+
+  const secondsInMinute = 60;
+  const secondsInHour = secondsInMinute * 60;
+  const secondsInDay = secondsInHour * 24;
+  const secondsInWeek = secondsInDay * 7;
+
+  let timeAgo;
+
+  if (diffInSeconds < secondsInMinute) {
+    timeAgo = `${diffInSeconds} second${diffInSeconds === 1 ? '' : 's'} ago`;
+  } else if (diffInSeconds < secondsInHour) {
+    const minutes = Math.floor(diffInSeconds / secondsInMinute);
+    timeAgo = `${minutes} minute${minutes === 1 ? '' : 's'} ago`;
+  } else if (diffInSeconds < secondsInDay) {
+    const hours = Math.floor(diffInSeconds / secondsInHour);
+    timeAgo = `${hours} hour${hours === 1 ? '' : 's'} ago`;
+  } else if (diffInSeconds < secondsInWeek) {
+    const days = Math.floor(diffInSeconds / secondsInDay);
+    timeAgo = `${days} day${days === 1 ? '' : 's'} ago`;
+  } else {
+    // If more than a week has passed, format the date as "dd.mm.yy hh:mm"
+    return date.toLocaleString('en-GB', {
+      day: '2-digit',
+      month: '2-digit',
+      year: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false
+    }).replace(',', '');
+  }
+
+  return {timeAgo};
+}
+
 const getDateOrder = (order) => {
   try {
     //parse: 2024-10-03T01:22:03.525255Z
     let date = new Date(order.created_at);
-    return date.toDateString();
+    let date_result = formatDate(date);
+    return date_result.timeAgo;
   } catch (e) {
     return "-";
   }
@@ -192,6 +268,7 @@ const getDateOrder = (order) => {
   margin: 0 auto;
   min-height: 64vh;
   box-shadow: rgb(0 0 0 / 5%) 0px -9px 12px 10px;
+  font-size: 18px;
 }
 
 .CartCheckoutFooter {
@@ -234,11 +311,6 @@ const getDateOrder = (order) => {
   display: inline-flex;
 }
 
-.CartCheckoutListItem {
-  box-shadow: rgb(0 0 0 / 5%) 2px 5px 8px 0px;
-  border-radius: 6px;
-  padding: 4px 0px;
-}
 
 .CartCheckoutConfirm {
   margin-bottom: 18px;

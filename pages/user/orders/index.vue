@@ -34,10 +34,8 @@
                   {{ cartItem.onc }}
                 </div>
               </div>
-
-
             </div>
-            <div class="listItemHeaderIcon">
+            <div class="listItemHeaderIcon" style="font-size: 14px; font-weight: 500; color: var(--text-second-color);">
               {{ getDateOrder(cartItem) }}
             </div>
           </div>
@@ -46,7 +44,24 @@
           </div>
           <div class="listItemFooter" style="padding: 2px 0">
             <div class="listItemFooterWrap"
-                 style="display: flex; align-items: center; gap: 16px; justify-content: right">
+                 style="display: flex; align-items: center; gap: 16px; justify-content: space-between">
+              <div class="listItemFooterInfo" style="">
+                <div class="listItemFooterInfoProducts">
+                  <div class="listItemFooterInfoProductsWrapper">
+                    <div class="listItemFooterInfoProductsItem" v-if="cartItem.items" v-for="item in cartItem.items">
+                      <div class="productItemImg"
+                           style="border-radius: 20px; overflow: hidden; position: relative; width: 48px; height: 48px; border: solid 2px var(--brd-second-color); display: flex; align-items: center; justify-content: center; z-index: 2;">
+                        <img :src="getImageUrl(item.image_src)" style="width: 100%;">
+                        <div class="productItemQty" style="position: absolute; right: -1px; top: -1px;">
+                          <div class="productItemQtyBlock" style="background: #fff; padding: 2px 6px; font-size: 11px; z-index: 4; border-radius: 16px; border: solid 1px var(--accent-block-color)">
+                            {{ item.quantity }}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
               <div class="listItemFooterInfo" style="">
                 <div class="listItemFooterInfoQty">
                   {{ cartItem.total_amount !== null ? cartItem.total_amount + '€' : '' }}
@@ -91,11 +106,50 @@ const getStatusOrder = (order) => {
   }
 }
 
+const formatDate = (orderCreatedAt) => {
+  const now = new Date();
+  const date = new Date(orderCreatedAt);
+  const diffInSeconds = Math.floor((now - date) / 1000);
+
+  const secondsInMinute = 60;
+  const secondsInHour = secondsInMinute * 60;
+  const secondsInDay = secondsInHour * 24;
+  const secondsInWeek = secondsInDay * 7;
+
+  let timeAgo;
+
+  if (diffInSeconds < secondsInMinute) {
+    timeAgo = `${diffInSeconds} second${diffInSeconds === 1 ? '' : 's'} ago`;
+  } else if (diffInSeconds < secondsInHour) {
+    const minutes = Math.floor(diffInSeconds / secondsInMinute);
+    timeAgo = `${minutes} minute${minutes === 1 ? '' : 's'} ago`;
+  } else if (diffInSeconds < secondsInDay) {
+    const hours = Math.floor(diffInSeconds / secondsInHour);
+    timeAgo = `${hours} hour${hours === 1 ? '' : 's'} ago`;
+  } else if (diffInSeconds < secondsInWeek) {
+    const days = Math.floor(diffInSeconds / secondsInDay);
+    timeAgo = `${days} day${days === 1 ? '' : 's'} ago`;
+  } else {
+    // If more than a week has passed, format the date as "dd.mm.yy hh:mm"
+    return date.toLocaleString('en-GB', {
+      day: '2-digit',
+      month: '2-digit',
+      year: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false
+    }).replace(',', '');
+  }
+
+  return {timeAgo};
+}
+
 const getDateOrder = (order) => {
   try {
     //parse: 2024-10-03T01:22:03.525255Z
     let date = new Date(order.created_at);
-    return date.toDateString();
+    let date_result = formatDate(date);
+    return date_result.timeAgo;
   } catch (e) {
     return "-";
   }
@@ -182,9 +236,11 @@ const getDateOrder = (order) => {
 }
 
 .CartCheckoutListItem {
-  box-shadow: rgb(0 0 0 / 5%) 2px 5px 8px 0px;
+  /*box-shadow: rgb(240 240 240) 3px -12px 13px 8px;*/
   border-radius: 6px;
-  padding: 4px 0px;
+  padding: 4px 6px;
+  border: solid 2px rgba(248, 248, 248, 0.8);
+  overflow: hidden;
 }
 
 .CartCheckoutConfirm {
