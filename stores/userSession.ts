@@ -23,7 +23,9 @@ export const useUserStore = defineStore("userStore", {
         },
         async fetchUserTokenAndPushCookie() {
             const {initData} = useWebApp();
-            useCookie("authToken", initData);
+            const authTokenCookie = useCookie("authToken");
+            // @ts-ignore
+            authTokenCookie.value = initData;
         },
         async fetchAndPushTgUser() {
             const {initDataUnsafe, initData} = useWebApp();
