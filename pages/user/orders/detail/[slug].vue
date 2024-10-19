@@ -34,13 +34,10 @@
         Delivery address: {{ data.orderData.delivery_address }}
       </div>
 
-      <div class="CartCheckoutBodyAmount" style="margin-bottom: 48px">
-        Total amount: <span class="CartCheckoutBodyAmountCount">{{ data.orderData.total_amount }} €</span>
-      </div>
-
       <div class="productListInfo" style="margin-bottom: 36px; border-bottom: 1px solid var(--brd-second-color);">
         <div class="productListInfoWrapper" style="display: flex; flex-flow: row wrap; gap: 6px;">
-          <div class="listItemFooterInfoProductsItem" v-if="data.orderData.items" v-for="item in data.orderData.items">
+          <div class="listItemFooterInfoProductsItem" v-if="data.orderData.items"
+               v-for="item in data.orderData.items">
             <div class="productItemImg"
                  style="border-radius: 20px; overflow: hidden; position: relative; width: 48px; height: 48px; border: solid 2px var(--brd-second-color); display: flex; align-items: center; justify-content: center; z-index: 2;">
               <img :src="getImageUrl(item.image_src)" style="width: 100%;">
@@ -72,52 +69,85 @@
       </div>
 
 
-      <div class="CartCheckoutBodyPay" style="margin-bottom: 20px"
-           v-if="data.orderData.status === 'payment_processing'">
-        <a class="CartCheckoutBodyPayLink"
-           :href="data.orderData.invoice.payment_link"
-           target="_blank"
-           style="padding: 14px 14px; width: 100%; border: solid 1px var(--accent-comp-high-color); border-radius: 6px; color: var(--accent-comp-high-color); font-size: 14px; font-weight: 600; display: flex; justify-content: space-between; align-items: center;">
-          <div class="CartCheckoutBodyPayLinkWrapper"
-               style="display: flex; justify-content: space-between; align-items: center; width: 100%">
-            <div class="payLinkTitle">
-              Pay for the order
-            </div>
-            <div class="payLinkIcon" style="display: flex;">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path fill-rule="evenodd" clip-rule="evenodd"
-                      d="M8.3939 5.39391C8.72864 5.05918 9.27135 5.05918 9.60609 5.39391L15.6061 11.3939C15.9408 11.7286 15.9408 12.2714 15.6061 12.6061L9.60609 18.6061C9.27135 18.9408 8.72864 18.9408 8.3939 18.6061C8.05917 18.2714 8.05917 17.7286 8.3939 17.3939L13.7878 12L8.3939 6.60609C8.05917 6.27136 8.05917 5.72865 8.3939 5.39391Z"
-                      fill="#4861F3"/>
-              </svg>
-            </div>
-          </div>
-        </a>
-      </div>
+      <template v-if="data.orderData.status !== 'cancelled'">
 
-      <div class="CartCheckoutBodyPay" style="margin-bottom: 20px"
-           v-if="data.orderData.status === 'payment_b_pnd_receipt'">
-        <button
-            style="padding: 8px 14px; background:transparent; border: solid 1px var(--accent-comp-high-color); border-radius: 6px; color: var(--accent-comp-high-color); font-size: 14px; font-weight: 600; width: 100%;">
-
-          <div class="CartCheckoutBodyPayLinkWrapper"
-               style="display: flex; justify-content: space-between; align-items: center; width: 100%">
-            <div class="payLinkTitle">
-              Request bank acc. for payment
+        <div class="CartCheckoutBodyPay" style="margin-bottom: 20px"
+             v-if="data.orderData.status === 'payment_processing'">
+          <a class="CartCheckoutBodyPayLink"
+             :href="data.orderData.invoice.payment_link"
+             target="_blank"
+             style="padding: 14px 14px; width: 100%; border: solid 1px var(--accent-comp-high-color); border-radius: 6px; color: var(--accent-comp-high-color); font-size: 14px; font-weight: 600; display: flex; justify-content: space-between; align-items: center;">
+            <div class="CartCheckoutBodyPayLinkWrapper"
+                 style="display: flex; justify-content: space-between; align-items: center; width: 100%">
+              <div class="payLinkTitle">
+                Pay for the order
+              </div>
+              <div class="payLinkIcon" style="display: flex;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" clip-rule="evenodd"
+                        d="M8.3939 5.39391C8.72864 5.05918 9.27135 5.05918 9.60609 5.39391L15.6061 11.3939C15.9408 11.7286 15.9408 12.2714 15.6061 12.6061L9.60609 18.6061C9.27135 18.9408 8.72864 18.9408 8.3939 18.6061C8.05917 18.2714 8.05917 17.7286 8.3939 17.3939L13.7878 12L8.3939 6.60609C8.05917 6.27136 8.05917 5.72865 8.3939 5.39391Z"
+                        fill="#4861F3"/>
+                </svg>
+              </div>
             </div>
-            <div class="payLinkTitle">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M3 21H21M3 10H21M5 6L12 3L19 6M4 10V21M20 10V21M8 14V17M12 14V17M16 14V17" stroke="#4861F3"
-                      stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </div>
-          </div>
-        </button>
-      </div>
+          </a>
+        </div>
 
-      <div class="CartCheckoutBodyPay" style="margin-bottom: 20px" v-if="data.orderData.pay_acc">
-        <!--           v-if="data.orderData.status === 'payment_b_pnd_receipt'">-->
-        <BlockBTransferOrder :recInfo="data.orderData.pay_acc" :orderData="data.orderData"/>
-      </div>
+        <div class="CartCheckoutBodyPay" style="margin-bottom: 20px"
+             v-if="data.orderData.status === 'payment_b_pnd_receipt'">
+          <button
+              style="padding: 8px 14px; background:transparent; border: solid 1px var(--accent-comp-high-color); border-radius: 6px; color: var(--accent-comp-high-color); font-size: 14px; font-weight: 600; width: 100%;">
+
+            <div class="CartCheckoutBodyPayLinkWrapper"
+                 style="display: flex; justify-content: space-between; align-items: center; width: 100%">
+              <div class="payLinkTitle">
+                Request bank acc. for payment
+              </div>
+              <div class="payLinkTitle">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M3 21H21M3 10H21M5 6L12 3L19 6M4 10V21M20 10V21M8 14V17M12 14V17M16 14V17" stroke="#4861F3"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            </div>
+          </button>
+        </div>
+
+        <div class="CartCheckoutBodyPay" style="margin-bottom: 36px" v-if="data.orderData.pay_acc">
+          <!--           v-if="data.orderData.status === 'payment_b_pnd_receipt'">-->
+          <BlockBTransferOrder :recInfo="data.orderData.pay_acc" :orderData="data.orderData"/>
+        </div>
+
+        <div class="CartCheckoutBodyAmount" style="margin-bottom: 24px" v-if="data.orderData.pay_acc">
+          Total sum to be transferred: <span class="CartCheckoutBodyAmountCount">{{
+            data.orderData.total_amount
+          }} €</span>
+        </div>
+
+        <div class="CartCheckoutBodyPay" style="margin-bottom: 20px"
+             v-if="data.orderData.pay_acc">
+          <button
+              style="padding: 8px 14px; background:transparent; border: solid 1px var(--accent-comp-high-color); border-radius: 6px; color: var(--accent-comp-high-color); font-size: 14px; font-weight: 600; width: 100%;">
+
+            <div class="CartCheckoutBodyPayLinkWrapper"
+                 style="display: flex; justify-content: space-between; align-items: center; width: 100%">
+              <div class="payLinkTitle">
+                I have paid, check the payment
+              </div>
+              <div class="payLinkTitle">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                      d="M12 19H6C5.20435 19 4.44129 18.6839 3.87868 18.1213C3.31607 17.5587 3 16.7956 3 16V8C3 7.20435 3.31607 6.44129 3.87868 5.87868C4.44129 5.31607 5.20435 5 6 5H18C18.7956 5 19.5587 5.31607 20.1213 5.87868C20.6839 6.44129 21 7.20435 21 8V12.5M3 10H21M16 19H22M22 19L19 16M22 19L19 22M7.005 15H7.01M11 15H13"
+                      stroke="#FF1919" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            </div>
+          </button>
+        </div>
+      </template>
+      <template v-else>
+
+      </template>
 
       <!--      {{data.orderData.pay_acc}}-->
 
