@@ -52,7 +52,8 @@
               </div>
             </div>
           </div>
-          <div class="listItemFooterInfoProductsList">
+        </div>
+        <div class="listItemFooterInfoProductsList">
             <div class="listItemFooterInfoProductsItem" v-if="data.orderData.items"
                  v-for="(item, key) in data.orderData.items" @click="$router.push({name: 'catalog-product-slug', params: {slug: item.product.idx}})">
               <div class="productsItemWrapper"
@@ -66,7 +67,6 @@
               </div>
             </div>
           </div>
-        </div>
       </div>
 
 
