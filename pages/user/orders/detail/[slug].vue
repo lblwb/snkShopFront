@@ -39,7 +39,7 @@
       </div>
 
       <div class="productListInfo" style="margin-bottom: 36px; border-bottom: 1px solid var(--brd-second-color);">
-        <div class="productListInfoWrapper">
+        <div class="productListInfoWrapper" style="display: flex; flex-flow: row wrap; gap: 6px;">
           <div class="listItemFooterInfoProductsItem" v-if="data.orderData.items" v-for="item in data.orderData.items">
             <div class="productItemImg"
                  style="border-radius: 20px; overflow: hidden; position: relative; width: 48px; height: 48px; border: solid 2px var(--brd-second-color); display: flex; align-items: center; justify-content: center; z-index: 2;">
