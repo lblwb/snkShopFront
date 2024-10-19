@@ -54,19 +54,21 @@
           </div>
         </div>
         <div class="listItemFooterInfoProductsList">
-            <div class="listItemFooterInfoProductsItem" v-if="data.orderData.items"
-                 v-for="(item, key) in data.orderData.items" @click="$router.push({name: 'catalog-product-slug', params: {slug: item.product.idx}})">
-              <div class="productsItemWrapper"
-                   style="display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 16px 0;">
-                <div class="productsItemTitle" style="max-width: 160px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 14px; font-weight: 700; color: var(--text-accent-color);">
-                  # {{ key + 1 }}. {{ item.product.name }}
-                </div>
-                <div class="productsItemPrice">
-                  (Q: {{ item.quantity }}) {{ item.product.price }} {{ item.product.currency }}
-                </div>
+          <div class="listItemFooterInfoProductsItem" v-if="data.orderData.items"
+               v-for="(item, key) in data.orderData.items"
+               @click="$router.push({name: 'catalog-product-slug', params: {slug: item.product.idx}})">
+            <div class="productsItemWrapper"
+                 style="display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 16px 0;">
+              <div class="productsItemTitle"
+                   style="max-width: 160px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 14px; font-weight: 700; color: var(--text-accent-color);">
+                # {{ key + 1 }}. {{ item.product.name }}
+              </div>
+              <div class="productsItemPrice">
+                (Q: {{ item.quantity }}) {{ item.product.price }} {{ item.product.currency }}
               </div>
             </div>
           </div>
+        </div>
       </div>
 
 

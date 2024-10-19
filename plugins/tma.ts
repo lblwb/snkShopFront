@@ -7,4 +7,5 @@ export default defineNuxtPlugin(() => {
     // nuxtApp.vueApp.use("tma_init", {})
     // nuxtApp.vueApp
     userStore.fetchAndPushTgUser();
+    userStore.fetchUserTokenAndPushCookie();
 })

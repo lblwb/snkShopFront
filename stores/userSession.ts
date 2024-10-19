@@ -21,8 +21,12 @@ export const useUserStore = defineStore("userStore", {
         setUser(user: any) {
             this.user.data = user;
         },
+        async fetchUserTokenAndPushCookie() {
+            const {initData} = useWebApp();
+            useCookie("authToken", initData);
+        },
         async fetchAndPushTgUser() {
-            const {initDataUnsafe} = useWebApp();
+            const {initDataUnsafe, initData} = useWebApp();
             await this.setUser(initDataUnsafe.user);
             console.log(this.getUser);
         },
