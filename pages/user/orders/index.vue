@@ -186,7 +186,7 @@ const getDateOrder = (order) => {
   padding: 16px;
   background: #fff;
   border-radius: 16px;
-  position: absolute;
+  /*position: absolute;*/
   bottom: 0;
   right: 0;
   left: 0;
