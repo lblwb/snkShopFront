@@ -240,7 +240,7 @@ const getDateOrder = (order) => {
   border-radius: 6px;
   padding: 4px 6px;
   border: solid 2px rgba(248, 248, 248, 0.8);
-  overflow: hidden;
+  /*overflow: hidden;*/
 }
 
 .CartCheckoutConfirm {
