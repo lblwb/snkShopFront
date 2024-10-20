@@ -119,7 +119,8 @@
          v-if="InputSelPayment.selected !== null && InputSelPayment.selected.id && InputSelPayment.selected.id == 'transfer'"
     >
       <input name="InputConfirm" type="checkbox" v-model="InptBankTransConfirmTerm.checked">
-      <label for="InputConfirm" style="max-width: 36vh">I have read and accept the terms bank transfer and conditions</label>
+      <label for="InputConfirm" style="max-width: 36vh">I have read and accept the terms bank transfer and
+        conditions</label>
 
       <label for="InputConfirm" style="margin-bottom: 8px; display: block; color: var(--accent-second-color);"
              v-if="InptBankTransConfirmTerm.checked == undefined || InptBankTransConfirmTerm.checked == null">*** accept
@@ -163,6 +164,7 @@ import CheckoutCountry from "~/components/app/Main/Checkout/CheckoutCountry.vue"
 import CheckoutPoints from "~/components/app/Main/Checkout/CheckoutPoints.vue";
 import CheckoutClientInfo from "~/components/app/Main/Checkout/CheckoutClientInfo.vue";
 import {useToast} from 'maz-ui';
+import {useUserOrdersStore} from "~/stores/user/orders/userOrders";
 
 definePageMeta({
   layout: 'twa-default'
@@ -174,7 +176,7 @@ const appWeb = useWebApp();
 const appMainButton = useWebAppMainButton();
 const appPopup = useWebAppPopup();
 
-const router = useRouter();
+const $router = useRouter();
 
 const cartStore = useCartStore();
 const cartItems = computed(() => cartStore.getItems);
@@ -182,6 +184,7 @@ const cartQtyItem = computed(() => cartStore.getTotalItems);
 const cartPrice = computed(() => cartStore.getTotalPrice);
 
 const cartCheckoutStore = useCartCheckoutStore();
+const userOrdersStore = useUserOrdersStore();
 
 const checkoutBtn = reactive({
   show: computed(isCheckoutAllowed),
@@ -315,13 +318,13 @@ const checkoutCartData = async () => {
     payload_data['pnt_zip'] = InputPrcCntryDelSel.value.selected.zip_code;
   }
 
-  const {success, payment_link} = await cartCheckoutStore.fetchOrderCheckout({
+  const {success, payment_link, order} = await cartCheckoutStore.fetchOrderCheckout({
     data: payload_data
   });
 
   console.log(paymentMethod, "payment_link", payment_link);
 
-  const success_msg = "Order created. Waiting confirmation for payment.";
+  const success_msg = "Order created. Waiting confirmation for payment. 5-min";
   const redirect_payment_page_msg = "Order created. Redirect to payment page.";
   const not_created_msg = "Order not created. Retry later.";
 
@@ -341,7 +344,9 @@ const checkoutCartData = async () => {
         position: 'top-center',
       });
 
-      clearCart();
+      clearCart(false);
+
+      await $router.push({name: 'user-orders-detail-slug', params: {slug: order.idx}});
 
       return;
     }
@@ -352,7 +357,10 @@ const checkoutCartData = async () => {
       position: 'top-center',
     });
 
-    clearCart();
+    clearCart(false);
+    //
+    await userOrdersStore.fetchOrdersByUserAcc();
+    await $router.push({name: 'user-orders-detail-slug', params: {slug: order.idx}});
 
     return;
 
@@ -382,6 +390,7 @@ const checkoutCartData = async () => {
     // }
 
   }
+
 }
 
 // Check Valid Fields
@@ -447,11 +456,11 @@ function isCheckoutAllowed() {
 watchEffect(() => {
   if (cartQtyItem.value === 0) {
 
-    toastNotif.warning("Cart is empty.", {
+    $toast.warning("Cart is empty.", {
       timeout: 2000
     });
 
-    router.push({name: 'index'});
+    $router.push({name: 'index'});
 
     // appPopup.showAlert("Cart is empty.");
   } else {
@@ -477,7 +486,7 @@ watchEffect(() => {
 
 onMounted(() => {
   if (cartQtyItem.value === 0) {
-    router.push({name: 'index'});
+    $router.push({name: 'index'});
     appPopup.showAlert("Cart is empty.");
   } else {
     // Дополнительная логика при монтировании компонента, если необходимо
@@ -488,9 +497,11 @@ onBeforeRouteLeave(() => {
   // Логика перед уходом с маршрута, если необходимо
 });
 
-const clearCart = () => {
+const clearCart = (redirect = true) => {
   cartStore.clearCart();
-  router.push({name: 'index'});
+  if (redirect) {
+    $router.push({name: 'index'});
+  }
 }
 
 const removeProductCart = (product) => {

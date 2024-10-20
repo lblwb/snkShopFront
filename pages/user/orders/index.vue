@@ -47,13 +47,14 @@
                  style="display: flex; align-items: center; gap: 16px; justify-content: space-between">
               <div class="listItemFooterInfo" style="">
                 <div class="listItemFooterInfoProducts">
-                  <div class="listItemFooterInfoProductsWrapper">
+                  <div class="listItemFooterInfoProductsWrapper" style="display: flex;gap: 4px;">
                     <div class="listItemFooterInfoProductsItem" v-if="cartItem.items" v-for="item in cartItem.items">
                       <div class="productItemImg"
                            style="border-radius: 20px; overflow: hidden; position: relative; width: 48px; height: 48px; border: solid 2px var(--brd-second-color); display: flex; align-items: center; justify-content: center; z-index: 2;">
                         <img :src="getImageUrl(item.image_src)" style="width: 100%;">
                         <div class="productItemQty" style="position: absolute; right: -1px; top: -1px;">
-                          <div class="productItemQtyBlock" style="background: #fff; padding: 2px 6px; font-size: 11px; z-index: 4; border-radius: 16px; border: solid 1px var(--accent-block-color)">
+                          <div class="productItemQtyBlock"
+                               style="background: #fff; padding: 2px 6px; font-size: 11px; z-index: 4; border-radius: 16px; border: solid 1px var(--accent-block-color)">
                             {{ item.quantity }}
                           </div>
                         </div>
@@ -90,13 +91,19 @@ definePageMeta({
 
 const $router = useRouter();
 const $route = useRoute();
+const {$uTimer} = useNuxtApp();
 
 const userOrdersStore = useUserOrdersStore();
 const cartOrdersItems = computed(() => userOrdersStore.getUserOrders)
 
 useAsyncData(() => {
   userOrdersStore.fetchOrdersByUserAcc();
-})
+});
+
+onMounted(async () => {
+  $uTimer.startTimer('orderListRefresh', userOrdersStore.fetchOrdersByUserAcc, 25000);
+  $uTimer.watchRouteForTimer('orderListRefresh');
+});
 
 const getStatusOrder = (order) => {
   if (!order) {

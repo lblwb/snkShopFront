@@ -160,10 +160,11 @@
 </template>
 
 <script setup>
+
 // import {useCartStore} from '~/stores/shop/cart/index';
 import {MainButton, useWebAppMainButton, useWebAppPopup, useWebApp} from "vue-tg";
-import {useUserOrdersStore} from "~/stores/user/orders/userOrders";
 import {getImageUrl} from "~/utils/assets/img";
+// import {useUserOrdersStore} from "~/stores/user/orders/userOrders";
 import BlockBTransferOrder from "~/components/app/Main/Orders/Block/BlockBTransferOrder.vue";
 
 definePageMeta({
@@ -172,22 +173,31 @@ definePageMeta({
 
 const $router = useRouter();
 const $route = useRoute();
+const {$uTimer} = useNuxtApp();
 
 let data = reactive({
   orderData: {}
 })
 
-// const userOrdersStore = useUserOrdersStore();
-// const cartOrdersItems = computed(() => userOrdersStore.getUserOrders)
 
-useAsyncData(async () => {
+const fetchDetailOrder = async () => {
   const {$axios} = useNuxtApp();
   const router_order_slug = $route.params.slug;
   const result = await $axios.get(`/api/v1/order/by_user/detail/${router_order_slug}`, {});
-  // userOrdersStore.fetchOrdersByUserAcc();
   data.orderData = result.data.order;
   console.log(result);
-})
+};
+
+// const $timeoutFetchDetailOrder = useIdleTimeout(fetchDetailOrder, 5000);
+
+useAsyncData(async () => {
+  await fetchDetailOrder();
+});
+
+onMounted(async () => {
+  $uTimer.startTimer('orderRefresh', fetchDetailOrder, 25000);
+  $uTimer.watchRouteForTimer('orderRefresh');
+});
 
 const getStatusOrder = (order) => {
   if (!order) {
