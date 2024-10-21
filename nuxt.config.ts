@@ -76,6 +76,7 @@ export default defineNuxtConfig({
         "~/plugins/shop/cart/cartPersist",
         "~/plugins/app/trigger/glbTapClick",
         '~/plugins/app/timers.ts',
+        '~/plugins/app/iph_key_blur.ts'
     ],
 
     compatibilityDate: '2024-08-26'

@@ -59,21 +59,21 @@
         v-if="InputCountryDelSel.selected !== null && InputCountryDelSel.selected.id && InputCountryDelSel.selected.id == 'OTH'">
 
       <div class="CartCheckoutAddress" style="margin-bottom: 18px">
-        <label for="InputAddress" style="margin-bottom: 8px; display: block;">City</label>
+        <label for="InputAddress blur-input" style="margin-bottom: 8px; display: block;" >City</label>
         <input placeholder="Enter City"
                style=" padding: 14px 14px;background: #fff;border-radius: 6px;width: 100%;border: solid 1px #EFEFF4;font-size: 14px;font-weight: 500;opacity: 0.6;"
                v-model="InputCity">
       </div>
 
       <div class="CartCheckoutAddress" style="margin-bottom: 18px">
-        <label for="InputAddress" style="margin-bottom: 8px; display: block;">Delivery Address</label>
+        <label for="InputAddress blur-input" style="margin-bottom: 8px; display: block;">Delivery Address</label>
         <input placeholder="Enter full address"
                style=" padding: 14px 14px;background: #fff;border-radius: 6px;width: 100%;border: solid 1px #EFEFF4;font-size: 14px;font-weight: 500;opacity: 0.6;"
                v-model="InputAddress">
       </div>
 
       <div class="CartCheckoutAddress" style="margin-bottom: 18px">
-        <label for="InputAddress" style="margin-bottom: 8px; display: block;">Postcode</label>
+        <label for="InputAddress blur-input" style="margin-bottom: 8px; display: block;">Postcode</label>
         <input placeholder="Enter Postcode"
                style=" padding: 14px 14px;background: #fff;border-radius: 6px;width: 100%;border: solid 1px #EFEFF4;font-size: 14px;font-weight: 500;opacity: 0.6;"
                v-model="InputPostcode">
@@ -90,7 +90,7 @@
 
 
     <div class="CartCheckoutPromocode" style="margin-bottom: 18px">
-      <label for="InputPromocode" style="margin-bottom: 8px; display: block;">Promo code</label>
+      <label for="InputPromocode blur-input" style="margin-bottom: 8px; display: block;">Promo code</label>
       <input placeholder="Enter promo code" style="
     padding: 14px 14px;
     background: #fff;

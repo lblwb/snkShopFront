@@ -3,7 +3,7 @@
     <div class="checkoutClientInfoBlock">
       <div class="CartCheckoutClientInfoInput" style="margin-bottom: 18px">
         <label for="InputClFullName" style="margin-bottom: 8px; display: block;">Name</label>
-        <input placeholder="Enter first and last name" style="
+        <input class="blur-input" placeholder="Enter first and last name" style="
     padding: 14px 14px;
     background: #fff;
     border-radius: 6px;
@@ -16,7 +16,7 @@
       </div>
       <div class="CartCheckoutClientInfoInput" style="margin-bottom: 18px">
         <label for="InputClPhone" style="margin-bottom: 8px; display: block;">Phone number</label>
-        <input type="phone" placeholder="Enter phone number" style="
+        <input class="blur-input" type="phone" placeholder="Enter phone number" style="
     padding: 14px 14px;
     background: #fff;
     border-radius: 6px;
@@ -29,7 +29,7 @@
       </div>
       <div class="CartCheckoutClientInfoInput" style="margin-bottom: 18px">
         <label for="InputClName" style="margin-bottom: 8px; display: block;">E-mail</label>
-        <input type="email" placeholder="E-mail" style="
+        <input class="blur-input" type="email" placeholder="E-mail" style="
     padding: 14px 14px;
     background: #fff;
     border-radius: 6px;

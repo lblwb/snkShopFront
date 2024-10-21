@@ -1,5 +1,5 @@
 <template>
-  <div class="select-trigger">
+  <div class="select-trigger" @blur="hiddenSelect">
     <button @click="toggleSelect" class="select-button" :class="{'__Placeholder': selectedOption !== null}">
       <span class="icon">
         <slot name="Icon">
@@ -36,7 +36,8 @@
 
     </button>
     <!--    -->
-    <ul v-if="isOpen" class="options" @mouseleave="hiddenSelect" style="max-height: 22vh; overflow-y:auto">
+    <ul v-if="isOpen" class="options" @blur="hiddenSelect" @mouseout="hiddenSelect" @focusout="hiddenSelect"
+        style="max-height: 22vh; overflow-y:auto" v-click-outside="hiddenSelect">
       <li v-for="option in filteredOptions" :key="option[props.selectOptionIdField]" @click="selectOption(option)"
           :class="{'selected': option == selectedCity }">
 
@@ -50,6 +51,7 @@
 </template>
 
 <script setup>
+import {vClickOutside} from 'maz-ui'
 import {ref, computed, watch} from 'vue';
 
 const props = defineProps({
@@ -102,7 +104,7 @@ const toggleSelect = () => {
 const hiddenSelect = () => {
   setTimeout(() => {
     isOpen.value = false;
-  }, 150)
+  }, 60)
 };
 
 const selectOption = (option) => {
@@ -110,6 +112,7 @@ const selectOption = (option) => {
   isOpen.value = false;
   emit('update:citySelected', option); // Отправляем выбранный город в родительский компонент
 }
+
 </script>
 
 <style scoped>
